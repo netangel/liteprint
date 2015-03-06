@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Контакты</title>
+    <link href="css/reset.css" rel="stylesheet" type="text/css" />
+    <link href="css/fonts.css" rel="stylesheet" type="text/css" />
+    <link href="css/styles.css" rel="stylesheet" type="text/css" />
+    <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <script type="text/javascript">
+        ymaps.ready(init);
+        var myMap, 
+            myPlacemark;
+
+        function init(){ 
+            myMap = new ymaps.Map("map", {
+                center: [64.54811119, 40.56728328],
+                zoom: 15,
+				controls: ['zoomControl', 'typeSelector',  'fullscreenControl']
+            }); 
+            
+            myPlacemark = new ymaps.Placemark([64.54763411, 40.56853179], {
+                hintContent: 'Печатный салон Лайт',
+                balloonContent: 'ул. Воскресенская, д, 116 корп. 3'
+            });
+            
+            myMap.geoObjects.add(myPlacemark);
+        }
+    </script>
+</head>
+
+<body>
+<div id="top">
+      <div class="wrap"> <a href="#" id="logo"></a>
+    <p id="top-contacts">ПН-ПТ: <b>10:00—19:00</b><br />
+          <a href="contacts.html">г. Архангельск, ул. Воскресенcкая, 116/3</a></p>
+    <div id="top-phone"><span>(8182)</span>42-00-16</div>
+    <div class="empty"></div>
+    <ul id="menu">
+          <li><a href="index.html">Калькулятор</a></li>
+          <li><a href="portfolio.html">Портфолио</a></li>
+          <li class="active">Контакты</li>
+          <li><a href="info.html">Правовая информация</a></li>
+        </ul>
+  </div>
+    </div>
+<div id="content">
+      <div class="wrap page-contacts">
+    <p>Телефоны:</p>
+    <h1>(8182) 40-00-70, 42-00-16</h1>
+    <p>Если у Вас возникли претензии или предложения по качеству нашей работы,<br />
+          Вы всегда можете позвонить директору: +7 911 554 5077</p>
+    <div id="map"></div>
+    <h1>ул. Воскресенская, д, 116 корп. 3,<br />
+          г. Архангельск</h1>
+  </div>
+    </div>
+<div id="footer">
+      <div class="wrap">
+    <div class="left"><a href="mailto:info@liteprint.me">info@liteprint.me</a></div>
+    <div class="right">Дизайн&nbsp;&#151; <a href="http://www.konfeta.me" target="_blank">Konfeta</a></div>
+  </div>
+    </div>
+</body>
+</html>

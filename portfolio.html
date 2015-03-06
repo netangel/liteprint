@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Портфолио</title>
+<link href="css/reset.css" rel="stylesheet" type="text/css" />
+<link href="css/fonts.css" rel="stylesheet" type="text/css" />
+<link href="css/styles.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="css/jquery.fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".fancybox").fancybox({
+			 beforeShow : function() {
+        var alt = this.element.find('img').attr('alt');
+        
+        this.inner.find('img').attr('alt', alt);
+        
+        this.title = alt;
+    },
+			padding: 10,
+			margin  : [160,0,10,0],
+			autoResize  : false,
+			fitToView   : true,
+			aspectRatio : false,
+			autoHeight : true,
+			width : 800,
+			height : 536,
+			closeBtn   : false,
+ helpers : {
+        title: {
+            type: 'inside'
+        }
+    }
+		});
+	});
+</script>
+</head>
+
+<body>
+<div id="top">
+  <div class="wrap"> <a href="#" id="logo"></a>
+    <p id="top-contacts">ПН-ПТ: <b>10:00—19:00</b><br />
+      <a href="contacts.html">г. Архангельск, ул. Воскресенcкая, 116/3</a></p>
+    <div id="top-phone"><span>(8182)</span>42-00-16</div>
+    <div class="empty"></div>
+    <ul id="menu">
+      <li><a href="index.html">Калькулятор</a></li>
+      <li class="active">Портфолио</li>
+      <li><a href="contacts.html">Контакты</a></li>
+      <li><a href="info.html">Правовая информация</a></li>
+    </ul>
+  </div>
+</div>
+<div id="content">
+  <div class="wrap page-portfolio">
+    <div class="work"><a class="fancybox" rel="group" href="img/work-big.jpg"><img src="img/work1.jpg" width="230" height="154" alt="Книга для «Конфеты»"></a>
+      <p>Книга для «Конфеты»</p>
+    </div>
+    <div class="work"><a class="fancybox" rel="group" href="img/work-big.jpg"><img src="img/work2.jpg" alt="Книга для «Конфеты»" width="230" height="154"></a>
+      <p>Книга для «Конфеты»</p>
+    </div>
+    <div class="work"><a class="fancybox" rel="group" href="img/work-big.jpg"><img src="img/work3.jpg" alt="Меню для «Вива Мише" width="230" height="154"></a>
+      <p>Меню для «Вива Мишель»</p>
+    </div>
+    <div class="work"><a class="fancybox" rel="group" href="img/work-big.jpg"><img src="img/work4.jpg" alt="Меню для ресторана Route6" width="230" height="154"></a>
+      <p>Меню для ресторана
+        Route66</p>
+    </div>
+    <div class="work"><a class="fancybox" rel="group" href="img/work-big.jpg"><img src="img/work5.jpg" alt="Веер бумаг для печати" width="230" height="154"></a>
+      <p>Веер бумаг для печати</p>
+    </div>
+    <div class="work"><a class="fancybox" rel="group" href="img/work-big.jpg"><img src="img/work6.jpg" alt="Календарь для салона красоты «Бенигнум»" width="230" height="154"></a>
+      <p>Календарь для салона красоты «Бенигнум»</p>
+    </div>
+    <div class="work"><a class="fancybox" rel="group" href="img/work-big.jpg"><img src="img/work7.jpg" alt="Календарь для «Флора-дизайн»" width="230" height="154"></a>
+      <p>Календарь для «Флора-дизайн»</p>
+    </div>
+    <div class="work"><a class="fancybox" rel="group" href="img/work-big.jpg"><img src="img/work8.jpg" alt="Календарь для предприятия «Краски Севера»" width="230" height="154"></a>
+      <p>Календарь для предприятия «Краски Севера»</p>
+    </div>
+    <div class="work"><a class="fancybox" rel="group" href="img/work-big.jpg"><img src="img/work9.jpg" alt="Календарь для салона красоты «Бенигнум»" width="230" height="154"></a>
+      <p>Календарь для салона красоты «Бенигнум»</p>
+    </div>
+    <div class="work"><a class="fancybox" rel="group" href="img/work-big.jpg"><img src="img/work10.jpg" alt="Календарь для «Упаковочных Материалов»" width="230" height="154"></a>
+      <p>Календарь для «Упаковочных Материалов»</p>
+    </div>
+    <div class="empty"></div>
+  </div>
+</div>
+<div id="footer">
+  <div class="wrap">
+    <div class="left"><a href="mailto:info@liteprint.me">info@liteprint.me</a></div>
+    <div class="right">Дизайн&nbsp;&#151; <a href="http://www.konfeta.me" target="_blank">Konfeta</a></div>
+  </div>
+</div>
+</body>
+</html>
