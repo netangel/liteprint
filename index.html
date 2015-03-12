@@ -41,9 +41,7 @@
 		$(".fancybox").fancybox({
 			 beforeShow : function() {
         var alt = this.element.find('img').attr('alt');
-        
         this.inner.find('img').attr('alt', alt);
-        
         this.title = alt;
     },
 			padding: 0,
@@ -98,139 +96,38 @@
     <div class="empty"></div>
     <!-- Элементы калькулятора -->
     <form id="xCalc">
-      <div class="col-paper"> <a href="#" class="btn-more"></a>
-        <div class="paper-block fancybox" data-fancybox-href="#paper-choose">
-          <p>Офсетная бумага<br />
+      <div class="col-paper" style="clear:left;"> 
+        <div id="product-paper">
+          <a href="#" class="btn-more"></a>
+          <div class="paper-block fancybox" data-fancybox-href="#paper-choose">
+            <p>Офсетная бумага<br />
             <em>80 г/м<sup>2</sup></em></p>
+          </div>
+        </div>
+        <br />
+        <div id="product-paper1" style="display:none;">
+          <a href="#" class="btn-more"></a>
+          <div class="paper-block fancybox" data-fancybox-href="#paper1-choose">
+            <p>Офсетная бумага<br />
+            <em>80 г/м<sup>2</sup></em></p>
+          </div>
         </div>
       </div>
-      <div class="col-properties">
-        <!-- <p class="col-label">Формат</p>
-        <div class="col-select rect"> <a href="#" class="active">A3</a> <a href="#">A4</a> <a href="#">A5</a> <a href="#">A6</a> </div>
-        <p class="col-label">Печать</p>
-        <div class="col-select rect rect-l"> <a href="#">4+0</a> <a href="#">4+1</a> <a href="#" class="active">4+4</a> <a href="#">1+1</a> <a href="#">1+0</a> <a href="#">без печати</a> </div>
-        <p class="col-label">Тираж</p>
-        <div class="col-select form-element">
-          <input type="text" value="100" class="styler" id="amount" />
-          <div class="amount"><a href="#" class="btn-m"></a><a href="#" class="btn-p"></a></div>
-          <a href="#" class="amount-change a50">50</a><a href="#" class="amount-change a100">100</a><a href="#" class="amount-change a200">200</a><a href="#" class="amount-change a300">300</a><a href="#" class="amount-change a500">500</a></div>
-        <p class="col-label">Ламинация</p>
-        <div class="col-select form-element">
-          <select>
-            <option>односторонняя матовая</option>
-            <option>двуторонняя матовая</option>
-            <option>односторонняя глянцевая</option>
-            <option>двуторонняя глянцевая</option>
-            <option>без ламинации</option>
-          </select>
-        </div>
-        <p class="col-label">Скругление</p>
-        <div class="col-select form-element">
-          <select>
-            <option>без кругления углов</option>
-            <option>скругление углов</option>
-            <option>ламинация</option>
-          </select>
-        </div>
-        <p class="col-label">&nbsp;</p>
-        <div class="col-select form-check">
-          <input type="checkbox" checked="checked" />
-          <label>Доставка по Архангельску</label>
-          <br />
-          <input type="checkbox" />
-          <label>Вне очереди (+10% к стоимости)</label>
-        </div> -->
-      </div>
+      <div class="col-properties"></div>
       <div class="col-price"> <a href="#" class="btn-delete"></a>
         <p class="price price-full">2970 <i>у</i></p>
         <p class="price price-one">2,9 <i>у</i>/экз.
-        
         <p class="price-dogovor-txt"><span class="price price-dogovor">2 709 <i>у</i></span><br />
           при заключении <a href="#">договора</a></p>
         <p class="summary">1000 экз. Формат А3, 1+1, офсетная бумага, 100г/м<sup>2</sup>. Срок исполнения — сутки.</p>
-        <a class="btn-send" href="#">Отправить заявку</a> </div>
+        <a class="btn-send" href="#">Отправить заявку</a>
+      </div>
     </form>
     <div class="empty"></div>
   </div>
 </div>
-<div id="paper-choose">
-  <div class="paper-block white" id="paper1">
-    <p>Офсетная бумага<br />
-      <em>80 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block white" id="paper2">
-    <p>Офсетная бумага<br />
-      <em>100 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block white" id="paper3">
-    <p>Матовая меловка<br />
-      <em>130 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block white" id="paper4">
-    <p>Глянцевая меловка<br />
-      <em>150 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block white" id="paper5">
-    <p>Матовая меловка<br />
-      <em>200 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block white" id="paper6">
-    <p>Глянцевая меловка<br />
-      <em>200 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block white" id="paper7">
-    <p>Глянцевая меловка<br />
-      <em>300 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block white" id="paper8">
-    <p>Матовая меловка<br />
-      <em>300 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block" id="paper9">
-    <p>Фотобумага E-Photo<br />
-      <em>190 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block" id="paper10">
-    <p>Фотобумага E-Photo<br />
-      <em>260 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block gray" id="paper11">
-    <p>Синтетика PICOFILM <br />
-      <em>255 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block gray" id="paper12">
-    <p>Картон Splendorlux<br />
-      <em>250 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block" id="paper13">
-    <p>Картон Tintoretto Gesso<br />
-      <em>250 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block" id="paper14">
-    <p>Картон Nettuno BCO Art<br />
-      <em>280 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block" id="paper15">
-    <p>Constellation Snow Tella<br />
-      <em>280 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block" id="paper16">
-    <p>Картон Aquarello Avorio<br />
-      <em>280 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block" id="paper17">
-    <p>Картон Marina Conciglione<br />
-      <em>240 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block" id="pape18">
-    <p>Картон Sirio Pearl Oyster Shell<br />
-      <em>300 г/м<sup>2</sup></em></p>
-  </div>
-  <div class="paper-block" id="paper19">
-    <p>Картон Woodstock Betulla<br />
-      <em>300 г/м<sup>2</sup></em></p>
-  </div>
-</div>
+<div id="paper-choose"></div>
+<div id="paper1-choose"></div>
 <div id="footer">
   <div class="wrap">
     <div class="left"><a href="mailto:info@liteprint.me">info@liteprint.me</a></div>

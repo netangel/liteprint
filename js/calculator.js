@@ -23,6 +23,10 @@ function xSetUI (sUi) {
 
 	//	Удаляем старые элементы
 	$("div.col-properties").html('');
+	$("#paper-choose").html('');
+
+	//	Скроем элементы выбора бумаги
+	$("#product-paper, #product1-paper").hide();
 
 	//	Параметры продукта для калькулятора
 	for (var key in a) {
@@ -53,7 +57,14 @@ function xSetUI (sUi) {
 					$("<a>").attr({
 						href: 'javascript://',
 						title: oOption.desc != null ? oOption.desc : '',
-						onclick: "xSetOption(" + "'" + key + "','" + oOption.v + "')",
+						key: key,
+						value: oOption.v
+					}).click(function() {
+						var key = $(this).attr('key');
+						var value = $(this).attr('value');
+						$("a[key="+key+"]").removeClass('active');
+						$(this).addClass("active");
+						xSetOption(key, value);
 					}).html(oOption.title)
 					.addClass(oOption.v == oRow.value ? 'active' : '')
 					.appendTo(container);
@@ -83,7 +94,6 @@ function xSetUI (sUi) {
 			}
 			
 			$(container).appendTo('div.col-properties');
-
 		} else if (oRow.type == "int") {
 			//	Заголовок
 			$("<p>").addClass('col-label')
@@ -117,12 +127,21 @@ function xSetUI (sUi) {
 			  .appendTo(container);
 
 			var amount_div = $("<div>").addClass('amount');
-			$("<a>").attr('href', 'javascript://').click(function() {
-				xIncrementOption();
+			// "–" Button
+			$("<a>").attr({
+				href: 'javascript://', 
+				key: key
+			}).click(function() {
+				xIncrementOption($(this).attr('key'), -1);
 			}).addClass('btn-m')
 			  .appendTo(amount_div);
-			$("<a>").attr('href', 'javascript://').click(function() {
-				xIncrementOption();
+
+			// "+" Button
+			$("<a>").attr({
+				href: 'javascript://',
+				key: key
+			}).click(function() {
+				xIncrementOption($(this).attr('key'), 1);
 			}).addClass('btn-p')
 			  .appendTo(amount_div);
 
@@ -130,17 +149,59 @@ function xSetUI (sUi) {
 
 			if (oRow.presets != null) {
 				for (var i = 0; i < oRow.presets.length; i++) {
-					$("<a>").attr('href', 'javascript://')
-							.addClass('amount-change')
+					$("<a>").attr({
+								href: 'javascript://',
+								key: key,
+								value: oRow.presets[i]
+							}).click(function() {
+								var key = $(this).attr('key');
+								$("#" + sUi + "_" + key).val( $(this).attr('value') ).change();
+							}).addClass('amount-change')
 							.text(oRow.presets[i])
-							.click(function() {
-								xSetOption();
-							})
 							.appendTo(container);
 				} 
 			}
 
 			$(container).appendTo('div.col-properties');
+		} else if (oRow.type == "paper") {
+			var bValueSuitable = false;                           
+			
+			if (xSidesFromColor(a[oRow.sidesVar].value) <= xMedia[oRow.value].sides) {
+				bValueSuitable = true;
+			}
+
+			for (var paper in xMedia) {
+				var oPaper = xMedia[paper];
+				var re = new RegExp("(?:^|,)" + oPaper.group + "(?:,|$)", "i");
+				if (xSidesFromColor(a[oRow.sidesVar].value) <= oPaper.sides	&& re.test(oRow.groups)) {
+					if (!bValueSuitable) {
+						xSetOption(key, paper, false);
+						bValueSuitable = true;
+					}
+					//	Элемент для выбора бумаги
+					var paperBlock = $("<div>").addClass('paper-block').attr({
+						id: paper,
+						onclick: 'xSetOption("' + key + '", "' + paper + '");'
+					});
+
+					//	Графика для отображения бумаги (background)
+					$(paperBlock).css({
+						'background-color': 'white',
+						'background-image': 'url("http://liteprint.me/i/calc/'+paper+'.jpg")',
+						'background-position': '1px 0px'
+					});
+
+					var sPaperName = oPaper.name;
+					var aTemp = sPaperName.split(", ");
+					sPaperName = aTemp[0];
+					var sPaperDescr = null;
+					if (aTemp[1] != null) sPaperDescr = '<em>' + aTemp[1] + '</em>';
+					$("<p>").html(sPaperName + (sPaperDescr ? "<br />" + sPaperDescr : '')).appendTo(paperBlock);
+
+					$(paperBlock).appendTo('#' + key + '-choose');
+				}
+			}
+			$("#product-"+key).show();
 		}
 		
 	}
@@ -157,7 +218,82 @@ function xSetUI (sUi) {
 
 function xSetOption (key, value, renderInterface) {
 	console.log("Key: ", key, ", Value: ", value);
+
+	if (a[key]!=null) {
+		a[key].value = value;
+		if (a[key].title != null) {
+			if (a[key].options!= null && a[key].type == 'enum')
+				a[key].title = _.detect(a[key].options, function(oX){return oX.v == value}).title;
+
+			if (a[key].type == 'paper')
+				a[key].title = xMedia[value].name;
+		}
+
+		xCalculate();
+		
+		if (a[key].type=='int')
+			$('#xOption_'+key+' input[type=text]').attr('value',value);
+	}
+
 	return true;
+}
+
+function xCalculate () {
+	
+	return true;
+}
+
+function xSidesFromColor (color) {
+	if (color.match(/\+/)) {
+		var aC = color.split("+");
+		if (aC[0]=="0" || aC[1]=="0") {
+			return 1;
+		} else {
+			return 2;
+		}
+	} else {
+		return 2;
+	}
+}
+
+function xCheckInt(key, bUpdateValue) {
+	if (a[key].type == 'int') {
+		var nVal = parseInt($("#" + sCurrentUI + "_" + key).val());
+		var bCorrect = true;
+		if (isNaN(nVal) || nVal < a[key].min || nVal > a[key].max) bCorrect = false;
+		if (bCorrect == false) {
+			if (bUpdateValue) {
+				if (isNaN(nVal) || nVal < a[key].min) {
+					a[key].value = a[key].min;
+				} else {
+					a[key].value = a[key].max;
+				}
+				$("#" + sCurrentUI + "_" + key).val(a[key].value);				
+			} else {
+				// $('#xOption_'+key+' input[type=text]').attr('style','border:1px solid #ff0000;color:#ff0000;');
+				return false;
+			}
+		} else {
+			// $('#xOption_'+key+' input[type=text]').attr('style','');
+			return true;
+		}
+	}
+
+	return true;
+}
+
+function xIncrementOption (key, koeff) {
+	if (a[key] != null) {
+		var oRow = a[key];
+		var nInc = 1;
+		if (oRow.increment != null) nInc = oRow.increment;
+		var nVal = parseInt(oRow.value);
+		var nValNew = Math.round(koeff*nInc + nVal);
+		if (isNaN(nValNew) || nValNew < a[key].min || nValNew > a[key].max)
+			nValNew = nVal;
+
+		$("#" + sCurrentUI + "_" + key).val(nValNew).change();
+	}
 }
 
 var xProducts = {
@@ -218,8 +354,8 @@ var xProducts = {
 					min:1, 
 					max:99999, 
 					increment:10, 
-					value:100,
-					presets:[50,100,200,300,500,1000]
+					value:50,
+					presets:[100,200,300,500,1000]
 			},
 			paper:  {name:"Бумага",
 					type:"paper",
@@ -1264,4 +1400,65 @@ var xProducts = {
 			}
 		}
 	}
+}
+
+//	Бумага
+var xMedia = {        
+	of80:      {name:"Офсетная бумага, 80г/м²",           price:1.82,     sides:2, size:"440×310мм", group:"Бумага"},
+	of100:      {name:"Офсетная бумага, 100г/м²",           price:2.27,     sides:2, size:"440×310мм", group:"Бумага"},
+	sc120:      {name:"Матовая меловка, 120г/м²",           price:1.30,     sides:2, size:"440×310мм", group:"Бумага"},
+	<!-- gc120:      {name:"Глянцевая меловка, 120г/м²",         price:1.85,     sides:2, size:"440×310мм", group:"Бумага"}, -->
+	sc140:      {name:"Матовая меловка, 140г/м²",           price:1.40,     sides:2, size:"440×310мм", group:"Бумага"}, 
+	<!-- gc140:      {name:"Глянцевая меловка, 140г/м²",         price:1.74,     sides:2, size:"440×310мм", group:"Бумага"},  -->
+	<!-- sc157:      {name:"Матовая меловка, 160г/м²",          price:2.20,     sides:2, size:"440×310мм", group:"Бумага"}, -->
+	gc157:      {name:"Глянцевая меловка, 150г/м²",         price:1.60,     sides:2, size:"440×310мм", group:"Бумага"},
+	sc250:      {name:"Матовая меловка, 200г/м²",           price:4.50,     sides:2, size:"440×310мм", group:"Бумага"},
+	gc250:      {name:"Глянцевая меловка, 200г/м²",         price:4.50,     sides:2, size:"440×310мм", group:"Бумага"},
+	sc300:      {name:"Глянцевая меловка, 300г/м²",         price:5.90,     sides:2, size:"440×310мм", group:"Бумага"},
+	mt300:      {name:"Матовая меловка, 300г/м²",         price:5.90,     sides:2, size:"440×310мм", group:"Бумага"},
+	w70705:      {name:"Фотобумага, E-Photo 190г/м²",         price:16.00,     sides:2, size:"440×310мм", group:"Бумага"},
+	w70706:      {name:"Фотобумага, E-Photo 260г/м²",         price:18.00,     sides:2, size:"440×310мм", group:"Бумага"},
+	pw225:      {name:"Синтетика PICOFILM 255 г/м3",         price:140.00,     sides:2, size:"430×310мм", group:"Бумага"},
+	np:      {name:"Без бумаги",         price:0.00,     sides:2, size:"430×310мм", group:"Бумага"},
+	
+	//Двустронний картон
+	<!--  gco310:   {name:"Картон Crystal Board, 300г/м²",          price:4.56,     sides:2, size:"464×320мм", group:"Картон"}, -->
+	<!--  cbr350:     {name:"Картон Crystal Board, 350г/м²",    price:4.34,     sides:2, size:"464×320мм", group:"Картон"}, -->
+	c0001580:   {name:"Картон Splendorlux, 250г/м²",   price:28.00,    sides:2, size:"464×320мм", group:"Картон"},
+	<!-- c0001507:   {name:"Картон Symbol Freelife, 300г/м²",   price:14.9,    sides:2, size:"464×320мм", group:"Картон"}, -->
+	c0001418:   {name:"Картон Tintoretto Gesso, 250г/м²",   price:29.5,    sides:2, size:"464×320мм", group:"Картон"},
+	c0001551:   {name:"Картон Nettuno BCO Art, 280г/м²",    price:34.0,    sides:2, size:"464×320мм", group:"Картон"},
+	c0001325:   {name:"Constellation Snow Tella, 280г/м²",    price:34.5,    sides:2, size:"464×320мм", group:"Картон"},
+	c0001334:   {name:"Картон Aquarello Avorio, 280г/м²",   price:32.5,    sides:2, size:"464×320мм", group:"Картон"},
+	<!--c0001335:   {name:"Картон Aquarello Avorio, 160г/м²",   price:12.6,    sides:2, size:"464×320мм", group:"Картон"},-->
+	c0001319:   {name:"Картон Marina Conciglione, 240г/м²", price:29.50,    sides:2, size:"464×320мм", group:"Картон"},
+	c0001572:   {name:"Картон Sirio Pearl Oyster Shell, 300г/м²", price:50.5,    sides:2, size:"464×320мм", group:"Картон"},
+	c0001575:   {name:"Картон Sirio Pearl Oyster Shell, 125г/м²", price:22.5,    sides:2, size:"464×320мм", group:"Картон"},
+	<!--   cbr270:   {name:"Картон Crystal Board, 270г/м²",         price:3.28,     sides:2, size:"464×320мм", group:"Картон"},  -->
+	cbr300:   {name:"Картон 2 стороны, 300г/м²",        price:7.50,     sides:2, size:"464×320мм", group:"Картон"}, 
+	c10001563:   {name:"Картон Woodstock Betulla, 300г/м²", price:30.5,    sides:2, size:"464×320мм", group:"Картон"},
+	c0001573:   {name:"Картон Sirio Pearl Polar Down, 300г/м²", price:50.5,    sides:2, size:"464×320мм", group:"Картон"},
+	c0001574:   {name:"Картон Sirio Pearl Polar Down, 125г/м²", price:22.5,    sides:2, size:"464×320мм", group:"Картон"},
+	c0001570:   {name:"Картон Sirio Pearl Aurium, 300г/м²",   price:60.5,    sides:2, size:"464×320мм", group:"Картон"},
+	c0001571:   {name:"Картон Sirio Pearl Platinum, 300г/м²",price:60.5,   sides:2, size:"464×320мм", group:"Картон"},
+	<!-- yb200:   {name:"Синтетика Yapo Blue 200 г/м2",price:20.65,   sides:2, size:"450×320мм", group:"Картон"}, -->
+	<!-- endgold200:   {name:"Бумага ENDURO GOLD 75 г/м²",price:29.25,   sides:2, size:"464×320мм", group:"Картон"}, -->
+	spg300:   {name:"Картон Splendorgel, 300 г/м2",   price:30.5,    sides:2, size:"464×320мм", group:"Картон"},
+	<!-- c0028824:   {name:"Картон Savile Row Tweed Camel, 300г/м²",price:20.35,   sides:2, size:"450×320мм", group:"Картон"}, -->
+	
+	
+	//Односторонний картон      
+	gsk160:   {name:"Калька GSK ExtraWhite, 110г/м²",price:25.5,   sides:1, size:"464×320мм", group:"Картон"},
+	<!-- glama150:   {name:"Калька Glama Digit, 150г/м²",price:25.50,   sides:1, size:"464×320мм", group:"Картон"},-->
+	<!--   cpa270:   {name:"Картон Crystal Pack, 270г/м²",   price:2.99,    sides:1, size:"464×320мм", group:"Картон"}, -->
+	<!-- cpa295:   {name:"Картон 1 сторона, 300г/м²",   price:4.76,    sides:1, size:"464×320мм", group:"Картон"},-->
+	<!-- pt135:      {name:"Синтетика прозр Picofilm 225 г/м3",         price:100.00,     sides:2, size:"430×310мм", group:"Бумага"},-->
+	
+	//Самоклейка
+	
+	adest2:   {name:"Самоклейка Adestor Gloss Perm., 195г/м²",price:13.5,         sides:1, size:"464×320мм", group:"Самоклейка"},
+	yupotako:   {name:"Yupo Tako синтетика лип, 170г/м²",price:130,         sides:1, size:"460×320мм", group:"Самоклейка"},
+
+	//Тёмный картон
+	<!--   c10022460:{name:"Картон Sirio Black, 290г/м²",price:13.87,   sides:2, size:"464×320мм", group:"ТёмныйКартон"} -->
 }

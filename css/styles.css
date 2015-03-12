@@ -241,6 +241,9 @@ H1 {
 	float: left;
 	padding-top: 25px;
 }
+.paper-header {
+	clear: both;
+}
 .paper-block {
 	border: 1px solid #DDDDDD;
 	background: #FAFAFA;
@@ -277,25 +280,26 @@ H1 {
 	top: 14px;
 	right: 12px;
 }
-#paper-choose {
+#paper-choose, #paper1-choose {
 	width: 970px;
 	margin: 0 auto;
 	display: none;
 	padding: 10px 10px 0 0px;
 }
-#paper-choose .paper-block {
+#paper-choose .paper-block, #paper1-choose .paper-block {
 	float: left;
 	margin: 0 0px 10px 10px;
 	width: 170px;
 	text-align: left;
 }
-#paper-choose .paper-block:hover P, #paper-choose .paper-block:hover EM {
+#paper-choose .paper-block:hover P, #paper-choose .paper-block:hover EM, 
+#paper1-choose .paper-block:hover P, #paper1-choose .paper-block:hover EM {
 	color: #FFA64D;
 }
-#paper-choose .white {
+#paper-choose .white, #paper1-choose .white {
 	background-color: #fff;
 }
-#paper-choose .gray {
+#paper-choose .gray, #paper1-choose .gray {
 	background-color: #FAFAFA;
 }
 #paper9 {
