@@ -35,8 +35,8 @@ function xSetUI (sUi) {
 		//	Enum поле
 		if (oRow.type == "enum") {
 			//	Заголовок
-			$("<p>").addClass('col-label')
-					.html( oRow.elemClass == 'form-check' ? '&nbsp;' : oRow.name )
+			$("<div>").addClass('col-label')
+					.html( oRow.elemClass == 'form-check' ? '&nbsp;' : '<span>'+oRow.name+'</span>' )
 					.appendTo('div.col-properties');
 
 			//	Контейнер для значений
@@ -96,8 +96,8 @@ function xSetUI (sUi) {
 			$(container).appendTo('div.col-properties');
 		} else if (oRow.type == "int") {
 			//	Заголовок
-			$("<p>").addClass('col-label')
-					.html( oRow.elemClass == 'form-check' ? '&nbsp;' : oRow.name )
+			$("<div>").addClass('col-label')
+					.html( oRow.elemClass == 'form-check' ? '&nbsp;' : '<span>'+oRow.name+'</span>' )
 					.appendTo('div.col-properties');
 
 			//	Контейнер для значений
