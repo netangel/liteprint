@@ -241,14 +241,24 @@ H1 {
 	float: left;
 	padding-top: 25px;
 }
-.paper-header {
-	clear: both;
+a.paper-header  {
+	display: block;
+	float: left;
+	color: #111;
+	font-family: "museo_sans_cyrl500",sans-serif;
+	font-weight: 500;
+	position: relative;
+	top: 10px;
+	right: -12px;
+}
+a.paper-header:active, a.paper-header:visited {
+	color: #111;
 }
 .paper-block {
 	border: 1px solid #DDDDDD;
-	background: #FAFAFA;
-	padding: 11px 0px 0 12px;
-	height: 121px;
+	/*background: #FAFAFA;*/
+	padding: 31px 0px 0 12px;
+	height: 101px;
 	cursor: pointer;
 }
 .paper-block:hover {
@@ -263,6 +273,7 @@ H1 {
 	margin: 0;
 	font-size: 13px;
 	color: #333333;
+	clear: both;
 }
 .paper-block P EM SUP {
 	font-size: 8px;
@@ -291,6 +302,8 @@ H1 {
 	margin: 0 0px 10px 10px;
 	width: 170px;
 	text-align: left;
+	height: 121px;
+    padding: 11px 0 0 12px;
 }
 #paper-choose .paper-block:hover P, #paper-choose .paper-block:hover EM, 
 #paper1-choose .paper-block:hover P, #paper1-choose .paper-block:hover EM {

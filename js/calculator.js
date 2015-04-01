@@ -26,7 +26,7 @@ function xSetUI (sUi) {
 	$("#paper-choose").html('');
 
 	//	Скроем элементы выбора бумаги
-	$("#product-paper, #product1-paper").hide();
+	$("#product-paper, #product-paper1").hide();
 
 	//	Параметры продукта для калькулятора
 	for (var key in a) {
@@ -170,7 +170,10 @@ function xSetUI (sUi) {
 				bValueSuitable = true;
 			}
 
+			var default_paper = '';
+
 			for (var paper in xMedia) {
+				if (paper == oRow.value) default_paper = paper;
 				var oPaper = xMedia[paper];
 				var re = new RegExp("(?:^|,)" + oPaper.group + "(?:,|$)", "i");
 				if (xSidesFromColor(a[oRow.sidesVar].value) <= oPaper.sides	&& re.test(oRow.groups)) {
@@ -201,6 +204,23 @@ function xSetUI (sUi) {
 					$(paperBlock).appendTo('#' + key + '-choose');
 				}
 			}
+			//	Заголовок элемента
+			$("#product-"+key+" a.paper-header").text(oRow.name);
+			//	Бумага по-умолчанию
+			if (default_paper != '') {
+				$("#product-"+key).css({
+					'background-color': 'white',
+					'background-image': 'url("http://liteprint.me/i/calc/'+default_paper+'.jpg")',
+					'background-position': '1px 0px'
+				});
+				var sPaperName = xMedia[default_paper].name;
+				var aTemp = sPaperName.split(", ");
+				sPaperName = aTemp[0];
+				var sPaperDescr = null;
+				if (aTemp[1] != null) sPaperDescr = '<em>' + aTemp[1] + '</em>';
+				$("#product-"+key+" p").html(sPaperName + (sPaperDescr ? "<br />" + sPaperDescr : ''));
+			};
+
 			$("#product-"+key).show();
 		}
 		
@@ -231,14 +251,54 @@ function xSetOption (key, value, renderInterface) {
 
 		xCalculate();
 		
-		if (a[key].type=='int')
+		if (a[key].type == 'int')
 			$('#xOption_'+key+' input[type=text]').attr('value',value);
+
+		if (a[key].type == 'paper') {
+			//	Показываем выбранную бумагу
+			$("#product-"+key).css({
+				'background-color': 'white',
+				'background-image': 'url("http://liteprint.me/i/calc/'+value+'.jpg")',
+				'background-position': '1px 0px'
+			});
+			var sPaperName = xMedia[value].name;
+			var aTemp = sPaperName.split(", ");
+			sPaperName = aTemp[0];
+			var sPaperDescr = null;
+			if (aTemp[1] != null) sPaperDescr = '<em>' + aTemp[1] + '</em>';
+			$("#product-"+key+" p").html(sPaperName + (sPaperDescr ? "<br />" + sPaperDescr : ''));
+
+			//	Закрываем список
+			$.fancybox.close();
+		};
 	}
 
 	return true;
 }
 
 function xCalculate () {
+	var price = 0;
+	var time = 0;
+	var html="";
+	var bCorrect = true;
+	if (a.aa != null) a.aa = function(){};
+	var aa = $.extend(true,{},a);
+
+	for (var key in a) {
+		var oRow = a[key];
+		var oRowA = aa[key];
+		if (oRowA.aa!=null) oRowA.aa=function(){};
+		if (oRowA.presets!=null) oRowA.presets=function(){};
+		if (oRowA.options!=null) oRowA.options=function(){};
+		if (oRowA.type!=null) oRowA.type=function(){};
+		if (oRowA.groups!=null) oRowA.groups=function(){};
+		if (oRowA.min!=null) oRowA.min=function(){};
+		if (oRowA.max!=null) oRowA.max=function(){};
+		if (oRowA.increment!=null) oRowA.increment=function(){};
+		if (xCheckInt(key, false)) {
+
+		}
+	}
 	
 	return true;
 }
@@ -357,7 +417,7 @@ var xProducts = {
 					value:50,
 					presets:[100,200,300,500,1000]
 			},
-			paper:  {name:"Бумага",
+			paper:  {name:"Страницы",
 					type:"paper",
 					groups:"Бумага,Картон,Самоклейка",
 					value:"gc157",
@@ -524,7 +584,7 @@ var xProducts = {
 					time:"(parseFloat(a.laminating.value)>0)?12:0",
 					elemClass: "jqselect"
 			},
-			paper:  {name:"Бумага обложки",
+			paper:  {name:"Обложка",
 					type:"paper",
 					groups:"Бумага,Картон",
 					value:"gc157",
@@ -549,7 +609,7 @@ var xProducts = {
 					],
 					elemClass: "rect-l"
 			},
-			paper1: {name:"Бумага страниц",
+			paper1: {name:"Страницы",
 					type:"paper",
 					groups:"Бумага",
 					value:"gc157",
@@ -680,7 +740,7 @@ var xProducts = {
 					value:100,
 					presets:[10,50,100,200,300,500]
 			},
-			paper:  {name:"Бумага",
+			paper:  {name:"Страницы",
 					type:"paper",
 					groups:"Бумага,Картон",
 					value:"gc157",
@@ -1081,7 +1141,7 @@ var xProducts = {
 					time:"(parseFloat(a.laminating.value)>0)?12:0",
 					elemClass: "jqselect"
 			},
-			paper:  {name:"Бумага обложек",
+			paper:  {name:"Обложка",
 					type:"paper",
 					groups:"Бумага,Картон",
 					value:"gc157",
@@ -1119,7 +1179,7 @@ var xProducts = {
 				time:"(parseFloat(a.laminating1.value)>0)?24:0",
 				elemClass: "jqselect"
 			},
-			paper1: {name:"Бумага листов",
+			paper1: {name:"Страницы",
 					type:"paper",
 					groups:"Бумага,Картон",
 					value:"gc157",
