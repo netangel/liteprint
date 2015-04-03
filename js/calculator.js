@@ -190,7 +190,7 @@ function xSetUI (sUi) {
 					//	Графика для отображения бумаги (background)
 					$(paperBlock).css({
 						'background-color': 'white',
-						'background-image': 'url("http://liteprint.me/i/calc/'+paper+'.jpg")',
+						'background-image': 'url("http://liteprint.me/i/paper_big/'+paper+'.jpg")',
 						'background-position': '1px 0px'
 					});
 
@@ -210,7 +210,7 @@ function xSetUI (sUi) {
 			if (default_paper != '') {
 				$("#product-"+key).css({
 					'background-color': 'white',
-					'background-image': 'url("http://liteprint.me/i/calc/'+default_paper+'.jpg")',
+					'background-image': 'url("http://liteprint.me/i/paper_big/'+default_paper+'.jpg")',
 					'background-position': '1px 0px'
 				});
 				var sPaperName = xMedia[default_paper].name;
@@ -258,7 +258,7 @@ function xSetOption (key, value, renderInterface) {
 			//	Показываем выбранную бумагу
 			$("#product-"+key).css({
 				'background-color': 'white',
-				'background-image': 'url("http://liteprint.me/i/calc/'+value+'.jpg")',
+				'background-image': 'url("http://liteprint.me/i/paper_big/'+value+'.jpg")',
 				'background-position': '1px 0px'
 			});
 			var sPaperName = xMedia[value].name;

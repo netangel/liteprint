@@ -38,7 +38,7 @@
     //  Калькулятор для первого продукта
     changeUI(first_product);
 
-		$(".fancybox").fancybox({
+		$(".fancybox, .paper-header, .btn-more").fancybox({
 			 beforeShow : function() {
         var alt = this.element.find('img').attr('alt');
         this.inner.find('img').attr('alt', alt);
@@ -98,8 +98,8 @@
     <form id="xCalc">
       <div class="col-paper" style="clear:left;"> 
         <div id="product-paper">
-          <a href="javascript://" class="paper-header">Обложка</a>
-          <a href="javascript://" class="btn-more"></a>
+          <a href="javascript://" class="paper-header" data-fancybox-href="#paper-choose">Обложка</a>
+          <a href="javascript://" class="btn-more" data-fancybox-href="#paper-choose"></a>
           <div class="paper-block fancybox" data-fancybox-href="#paper-choose">
             <p>Офсетная бумага<br />
             <em>80 г/м<sup>2</sup></em></p>
@@ -107,8 +107,8 @@
         </div>
         <br />
         <div id="product-paper1" style="display:none;">
-          <a href="javascript://" class="paper-header">Обложка</a>
-          <a href="javascript://" class="btn-more"></a>
+          <a href="javascript://" class="paper-header" data-fancybox-href="#paper1-choose">Обложка</a>
+          <a href="javascript://" class="btn-more" data-fancybox-href="#paper1-choose"></a>
           <div class="paper-block fancybox" data-fancybox-href="#paper1-choose">
             <p>Офсетная бумага<br />
             <em>80 г/м<sup>2</sup></em></p>
