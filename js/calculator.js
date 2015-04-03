@@ -1,4 +1,4 @@
-var a , o, x = new Object();
+var a, o, x = new Object();
 x.time = 0; x.price = 0;
 
 var sCurrentUI = 'vis';
@@ -233,6 +233,8 @@ function xSetUI (sUi) {
 		$(this).find('.jq-selectbox__trigger-arrow').css('background-position', 'left 0px');}
 	}); 
 
+	xCalculate();
+
 	return true;
 }
 
@@ -296,10 +298,66 @@ function xCalculate () {
 		if (oRowA.max!=null) oRowA.max=function(){};
 		if (oRowA.increment!=null) oRowA.increment=function(){};
 		if (xCheckInt(key, false)) {
-
+			if (oRow.qty != null)
+				oRowA.qty =  eval (oRow.qty).toString();
+			if (oRow.overhead != null) {
+				if (oRow.overheadFormula != null) {
+					oRowA.overhead = eval (oRow.overheadFormula).toString();
+					oRowA.overheadFormula = function(){};
+				} else {
+					 oRowA.overhead = eval (oRow.overhead).toString();
+				}
+			}
+			if (oRow.price != null) {
+				var nPrice = parseInt(eval (oRow.price));
+				if (isNaN(nPrice) == false) {
+					oRowA.price = nPrice.toString();
+					price += nPrice;
+				}
+			}  
+		} else {
+			bCorrect = false;
 		}
-	}
+		
+		if (oRow.time != null) {
+			var nTime = parseInt(eval (oRow.time));
+			if (isNaN(nTime) == false) {
+				oRowA.time = nTime.toString();
+				time += nTime;
+			}  
+		}
+
+		if (oRowA.title != null && oRowA.value != null) {
+			oRowA.value = oRowA.title;
+			oRowA.title = function(){};
+		}
 	
+		if ( (oRowA.time == '0' && oRowA.price == null) || (oRowA.time == null && oRowA.price == '0') || (oRowA.price=='0' && oRowA.time=='0') ) 
+			aa[key] = function(){};
+	}
+
+	x.price = xConst.priceRoundingBase*Math.ceil (price/xConst.priceRoundingBase);
+	x.price1 = Math.round ((x.price/a.qty.value)/0.01)/100
+	x.price20 = xConst.priceRoundingBase*Math.ceil (price*0.8/xConst.priceRoundingBase);
+
+	x.time = xConst.timeRoundingBase*Math.ceil ((time/24)/xConst.timeRoundingBase);
+	
+	if (bCorrect) {
+		a.aa=$.extend(true,{},aa);
+		// if (this.wJSON) {$("#zText").html(wJSON.stringify(aa))};  
+		$("p.summary").html(eval(o.desc));   
+		$("p.price-full").html(x.price+"<small> </small><i>у</i>");
+		$("span.price-dogovor").html(x.price20+"<small> </small><i>у</i>");
+		$("p.price-one").html(x.price1+"<small> </small><i>у</i>/экз.");
+		// $("#xDetailedPrice").html('<div style="font-size:90%;position:absolute;left:0;top:3px;width:70px;color:#888;">Расклад по&nbsp;цене</div>'+html)
+	 } else {
+		$("p.summary").html('<span style="color:red">'+eval(o.err)+'</span>');
+		$("p.price-full").html('');
+		$("span.price-dogovor").html('');
+		$("p.price-one").html('');
+		// $("#xDetailedPrice").html('');
+	}
+
 	return true;
 }
 
@@ -354,6 +412,10 @@ function xIncrementOption (key, koeff) {
 
 		$("#" + sCurrentUI + "_" + key).val(nValNew).change();
 	}
+}
+
+function xDecap (s) {
+	return s.substr(0,1).toLowerCase()+s.substr(1);
 }
 
 var xProducts = {
@@ -1522,3 +1584,41 @@ var xMedia = {
 	//Тёмный картон
 	<!--   c10022460:{name:"Картон Sirio Black, 290г/м²",price:13.87,   sides:2, size:"464×320мм", group:"ТёмныйКартон"} -->
 }
+
+var xConst = {
+	basePrice:      1.58,    
+	deliveryArkh:   100,    
+	paperMarkup:    0.3,    
+	oneCut:         1.2,      
+	priceRoundingBase: 1,   
+	timeRoundingBase:0.5,   
+	oneFoldPrice: 0.2,      
+	oneSideLaminationPrice:5,
+	oneCreasingPrice: 0.6,    
+	maxX:437,
+	maxY:308,
+	oneCalendarAssembly:10,
+	oneTearOffQuarter:20,
+	oneQuarterCalendCompo:6.6,
+	oneWireOPrice:1.6,
+	oneRoundingPrice:0.15,
+	oneBindPrice:{
+		glue:20,
+		stitch:5,
+		wireo:15
+	},
+	oneRiegelPrice:10,
+	onePersonalisationPrice:1,
+	oneOpaquePrice:2.5,
+	markup:0.18,
+	float1000:function (qty0,highK,lowK) {
+		var qty = parseInt(qty0);
+		if (highK==lowK || isNaN(qty) || qty<1) return highK;
+		if (qty >= 1000) return lowK-0.2;
+		var k = (1.284697726*(Math.pow(qty/500+1,-1.383)-0.21884735))*(highK-lowK) + lowK;
+		if (k>highK) k=highK;
+		if (k<lowK) k=lowK;
+		return k;
+	}
+};
+
