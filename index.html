@@ -8,10 +8,13 @@
 <link href="css/styles.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="css/jquery.fancybox.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/jquery.formstyler.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/tooltipster.css" type="text/css" media="screen">
+<link rel="stylesheet" href="css/themes/tooltipster-shadow.css" type="text/css" media="screen">
 <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
 <script type="text/javascript" src="js/jquery.formstyler.min.js"></script>
 <script type="text/javascript" src="js/jquery.fancybox.pack.js"></script>
 <script type="text/javascript" src="js/underscore-min.js"></script>
+<script type="text/javascript" src="js/jquery.tooltipster.min.js" charset="utf-8"></script>
 
 <!-- Calc stuff -->
 <script src="js/calculator.js" type="text/javascript" charset="utf-8"></script>
@@ -56,6 +59,15 @@
 			closeBtn   : false,
 			scrolling : 'no',
 		});
+
+    //  Tooltipster
+    $('#dogovor-tooltip').tooltipster({
+      content: $("<span>Cкидка 20% если вы постоянно у нас печатаетесь или вы – рек­лам­ное агентство.<br><br>Подпишите с нами договор и если ваш сре­дне­ме­сяч­ный объём заказов пре­вышает 10 000 р. – вы по­лу­чите скидку 20%.</span>"),
+      maxWidth: 200,
+      position: 'bottom',
+      theme: 'tooltipster-shadow'
+    });
+
 		$('input, select').styler({
 			onSelectOpened: function() {  
       		$(this).find('.jq-selectbox__trigger-arrow').css('background-position', 'left -20px');},
@@ -120,7 +132,7 @@
         <p class="price price-full"></p>
         <p class="price price-one"></p>
         <p class="price-dogovor-txt"><span class="price price-dogovor"></span><br />
-          при заключении <a href="#">договора</a></p>
+          при заключении <a href="#" id="dogovor-tooltip" title="Cкидка 20% если вы постоянно у нас печатаетесь или вы – рек­лам­ное агентство.">договора</a></p>
         <p class="summary"></p>
         <a class="btn-send" href="#">Отправить заявку</a>
       </div>
