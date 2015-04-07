@@ -418,6 +418,15 @@ function xDecap (s) {
 	return s.substr(0,1).toLowerCase()+s.substr(1);
 }
 
+function xPerSheet(add) {
+	var k = (add != null && isNaN(parseFloat(add)) != true) ? parseFloat(add) : 0;
+	var mX = xConst.maxX;
+	var mY = xConst.maxY;
+ 
+	return Math.max( Math.floor(mX/(parseInt(a.sizeX.value)+k)) * Math.floor(mY/(parseInt(a.sizeY.value)+k)), Math.floor(mY/(parseInt(a.sizeX.value)+k)) * Math.floor(mX/(parseInt(a.sizeY.value)+k)) )
+}
+
+
 var xProducts = {
 	sheet: {
 		name:   "Листовая продукция",
