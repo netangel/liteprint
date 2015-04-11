@@ -23,7 +23,7 @@ function xSetUI (sUi) {
 
 	//	Удаляем старые элементы
 	$("div.col-properties").html('');
-	$("#paper-choose").html('');
+	$("#paper-choose, #paper1-choose").html('');
 
 	//	Скроем элементы выбора бумаги
 	$("#product-paper, #product-paper1").hide();
@@ -191,7 +191,7 @@ function xSetUI (sUi) {
 					$(paperBlock).css({
 						'background-color': 'white',
 						'background-image': 'url("http://liteprint.me/i/paper_big/'+paper+'.jpg")',
-						'background-position': '1px 0px'
+						'background-position': '0px 0px'
 					});
 
 					var sPaperName = oPaper.name;
@@ -211,7 +211,7 @@ function xSetUI (sUi) {
 				$("#product-"+key).css({
 					'background-color': 'white',
 					'background-image': 'url("http://liteprint.me/i/paper_big/'+default_paper+'.jpg")',
-					'background-position': '1px 0px'
+					'background-position': '0px 0px'
 				});
 				var sPaperName = xMedia[default_paper].name;
 				var aTemp = sPaperName.split(", ");
@@ -261,7 +261,7 @@ function xSetOption (key, value, renderInterface) {
 			$("#product-"+key).css({
 				'background-color': 'white',
 				'background-image': 'url("http://liteprint.me/i/paper_big/'+value+'.jpg")',
-				'background-position': '1px 0px'
+				'background-position': '0px 0px'
 			});
 			var sPaperName = xMedia[value].name;
 			var aTemp = sPaperName.split(", ");
