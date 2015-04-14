@@ -190,7 +190,7 @@ function xSetUI (sUi) {
 					//	Графика для отображения бумаги (background)
 					$(paperBlock).css({
 						'background-color': 'white',
-						'background-image': 'url("http://liteprint.me/i/paper_big/'+paper+'.jpg")',
+						'background-image': 'url("http://liteprint.me/i/paper_big/'+paper+'-curl.jpg")',
 						'background-position': '0px 0px'
 					});
 
