@@ -8,7 +8,15 @@ function changeUI (key) {
 	//	Обновляем кнопочки в меню продуктов
 	$("#menu-types LI").removeClass('active');
 	$("#menu-types ."+xProducts[key].aClass).parent('LI').addClass('active');
-	// TODO: Добавить Scroll до калькулятора/меню
+	// Scroll до калькулятора/меню (но не для первого показа страницы)
+	if (!firstRun) {
+		$('html, body').animate({
+	        scrollTop: $("#"+key+"-button").offset().top-20
+	    }, 'fast');
+	} else {
+		firstRun = 0;
+	};
+	
 	return true;
 }
 
@@ -69,6 +77,11 @@ function xSetUI (sUi) {
 					.addClass(oOption.v == oRow.value ? 'active' : '')
 					.appendTo(container);
 				}
+
+				$("a", container).tooltipster({
+			      position: 'bottom',
+			      theme: 'tooltipster-shadow'
+			    });
 			} else if (oRow.elemClass == 'jqselect') {
 				var select = $("<select>").attr('onchange', "xSetOption(" + "'" + key + "', this.value)");
 				for (var i = 0; i < oRow.options.length; i++) {
@@ -91,6 +104,14 @@ function xSetUI (sUi) {
 				$("<label>").attr('for', sUi + "_" + key)
 							.text(oRow.options[1].title)
 							.appendTo(container);
+
+				if (oRow.options[1].desc) {
+					$(container).append('<a href="javascript://" title="' + oRow.options[1].desc + '" class="form-check-tooltip">(?)</a>');
+					$(".form-check-tooltip", container).tooltipster({
+				      position: 'bottom',
+				      theme: 'tooltipster-shadow'
+				    });
+				};
 			}
 			
 			$(container).appendTo('div.col-properties');
@@ -516,12 +537,12 @@ var xProducts = {
 					time:"(parseFloat(a.laminating.value)>0)?12:0",
 					elemClass: "jqselect"
 			},
-			rounding:  {name:"Кругление углов",  
+			rounding:  {name:"Скругление",  
 				type:"enum", 
 				value:0,
-				title:"без кругления",
+				title:"без кругления углов",
 				options:[
-					{title:"без кругления", v:"0"},
+					{title:"без кругления углов", v:"0"},
 					{title:"с 4-х сторон", v:"1"}
 				],
 				price:"xConst.oneRoundingPrice * parseFloat(a.rounding.value)*parseFloat(a.qty.value)",
@@ -557,7 +578,7 @@ var xProducts = {
 			   title:"в обычном режиме",
 			   options:[
 				   {title:"в обычном режиме", v:"1"},
-				   {title:"по-срочному", v:"1.3",desc:"В течение суток."}
+				   {title:"Вне очереди (+30% к стоимости)", v:"1.3", desc:"В течение суток."}
 			   ],
 			   price:"price*(parseFloat(a.express.value)-1)",
 			   time:"(parseFloat(a.express.value)>1)?-time+24:0",
@@ -725,7 +746,7 @@ var xProducts = {
 					title:"без доставки",
 					options:[
 						{title:"без доставки", v:"0"},
-						{title:"по Архангельску", v:"1"}
+						{title:"Доставка по Архангельску", v:"1"}
 					],
 					price:"xConst.deliveryArkh * parseFloat(a.delivery.value)",
 					elemClass: "form-check"
@@ -736,7 +757,7 @@ var xProducts = {
 			   title:"в обычном режиме",
 			   options:[
 				   {title:"в обычном режиме", v:"1"},
-				   {title:"по-срочному", v:"1.3",desc:"В течение двух рабочих дней."}
+				   {title:"Вне очереди (+30% к стоимости)", v:"1.3", desc:"В течение двух рабочих дней."}
 			   ],
 			   price:"price*(parseFloat(a.express.value)-1)",
 			   time:"(parseFloat(a.express.value)>1)?-time+48:0",
@@ -843,7 +864,7 @@ var xProducts = {
 					title:"без доставки",
 					options:[
 						{title:"без доставки", v:"0"},
-						{title:"по Архангельску", v:"1"}
+						{title:"Доставка по Архангельску", v:"1"}
 					],
 					price:"xConst.deliveryArkh * parseFloat(a.delivery.value)",
 					elemClass: "form-check"
@@ -854,7 +875,7 @@ var xProducts = {
 			   title:"в обычном режиме",
 			   options:[
 				   {title:"в обычном режиме", v:"1"},
-				   {title:"по-срочному", v:"1.3",desc:"В течение суток."}
+				   {title:"Вне очереди (+30% к стоимости)", v:"1.3", desc:"В течение суток."}
 			   ],
 			   price:"price*(parseFloat(a.express.value)-1)",
 			   time:"(parseFloat(a.express.value)>1)?-time+24:0",
@@ -943,12 +964,12 @@ var xProducts = {
 				time:"(parseFloat(a.laminating.value)>0)?12:0",
 				elemClass: "jqselect"
 			},
-			rounding:  {name:"Кругление углов",  
+			rounding:  {name:"Скругление",  
 				type:"enum", 
 				value:0,
 				title:"без кругления",
 				options:[
-					{title:"без кругления", v:"0"},
+					{title:"без кругления углов", v:"0"},
 					{title:"с 4-х сторон", v:"1"}
 				],
 				price:"xConst.oneRoundingPrice * parseFloat(a.rounding.value)*parseFloat(a.qty.value)",
@@ -973,7 +994,7 @@ var xProducts = {
 					title:"без доставки",
 					options:[
 						{title:"без доставки", v:"0"},
-						{title:"по Архангельску", v:"1"}
+						{title:"Доставка по Архангельску", v:"1"}
 					],
 					price:"xConst.deliveryArkh * parseFloat(a.delivery.value)",
 					elemClass: "form-check"
@@ -984,7 +1005,7 @@ var xProducts = {
 			   title:"в обычном режиме",
 			   options:[
 				   {title:"в обычном режиме", v:"1"},
-				   {title:"по-срочному", v:"1.3",desc:"В тот же день."}
+				   {title:"Вне очереди (+30% к стоимости)", v:"1.3", desc:"В тот же день."}
 			   ],
 			   price:"price*(parseFloat(a.express.value)-1)",
 			   time:"(parseFloat(a.express.value)>1)?-time+8:0",
@@ -1101,7 +1122,7 @@ var xProducts = {
 					title:"без доставки",
 					options:[
 						{title:"без доставки", v:"0"},
-						{title:"по Архангельску", v:"1"}
+						{title:"Доставка по Архангельску", v:"1"}
 					],
 					price:"xConst.deliveryArkh * parseFloat(a.delivery.value)",
 					elemClass: "form-check"
@@ -1112,7 +1133,7 @@ var xProducts = {
 			   title:"в обычном режиме",
 			   options:[
 				   {title:"в обычном режиме", v:"1"},
-				   {title:"по-срочному", v:"1.3",desc:"В течение двух дней."}
+				   {title:"Вне очереди (+30% к стоимости)", v:"1.3",desc:"В течение двух дней."}
 			   ],
 			   price:"price*(parseFloat(a.express.value)-1)",
 			   time:"(parseFloat(a.express.value)>1)?-time+48:0",
@@ -1288,7 +1309,7 @@ var xProducts = {
 					title:"без доставки",
 					options:[
 						{title:"без доставки", v:"0"},
-						{title:"по Архангельску", v:"1"}
+						{title:"Доставка по Архангельску", v:"1"}
 					],
 					price:"xConst.deliveryArkh * parseFloat(a.delivery.value)",
 					elemClass: "form-check"
@@ -1299,7 +1320,7 @@ var xProducts = {
 			   title:"в обычном режиме",
 			   options:[
 				   {title:"в обычном режиме", v:"1"},
-				   {title:"по-срочному", v:"1.3",desc:"В течение двух рабочих дней."}
+				   {title:"Вне очереди (+30% к стоимости)", v:"1.3",desc:"В течение двух рабочих дней."}
 			   ],
 			   price:"price*(parseFloat(a.express.value)-1)",
 			   time:"(parseFloat(a.express.value)>1)?-time+48:0",
@@ -1429,12 +1450,12 @@ var xProducts = {
 				type:"formula",
 				price:"parseFloat(a.opaque.value)* xConst.oneOpaquePrice*(parseFloat(a.paper.overhead)+Math.ceil(parseFloat(a.qty.value)/xPerSheet(a.bleed.value)))*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/xPerSheet(a.bleed.value)), 4.3, 1.85 )-1)"
 			},
-			rounding:  {name:"Кругление углов",  
+			rounding:  {name:"Скругление",  
 				type:"enum", 
 				value:0,
 				title:"без кругления",
 				options:[
-					{title:"без кругления", v:"0"},
+					{title:"без кругления углов", v:"0"},
 					{title:"с 4-х сторон", v:"1"}
 				],
 				price:"xConst.oneRoundingPrice * parseFloat(a.rounding.value)*parseFloat(a.qty.value)",
@@ -1507,7 +1528,7 @@ var xProducts = {
 					title:"без доставки",
 					options:[
 						{title:"без доставки", v:"0"},
-						{title:"по Архангельску", v:"1"}
+						{title:"Доставка по Архангельску", v:"1"}
 					],
 					price:"xConst.deliveryArkh * parseFloat(a.delivery.value)",
 					elemClass: "form-check"
@@ -1518,7 +1539,7 @@ var xProducts = {
 			   title:"в обычном режиме",
 			   options:[
 				   {title:"в обычном режиме", v:"1"},
-				   {title:"по-срочному", v:"1.3",desc:"В течение суток."}
+				   {title:"Вне очереди (+30% к стоимости)", v:"1.3", desc:"В течение суток."}
 			   ],
 			   price:"price*(parseFloat(a.express.value)-1)",
 			   time:"(parseFloat(a.express.value)>1)?-time+24:0",

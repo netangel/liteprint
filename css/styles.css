@@ -290,8 +290,9 @@ span.paper-header a:active, span.paper-header a:visited {
 	overflow: hidden;
 	background: url(../img/btns.png) no-repeat left -25px;
 	position: relative;
-	top: 5px;
-	margin: 0 5px;
+	top: 15px;
+	right: 12px;
+	/*margin: 0 5px;*/
 }
 #paper-choose, #paper1-choose {
 	width: 970px;
@@ -489,6 +490,13 @@ A.amount-change:hover {
 	color: #333;
 	font-size: 15px;
 }
+.form-check-tooltip {
+	display: block;
+    float: left;
+    margin: 0 5px;
+    position: relative;
+    top: 1px;
+}
 .col-price {
 	width: 230px;
 	float: left;
@@ -589,9 +597,7 @@ A.amount-change:hover {
 	line-height: 46px;
 	display: block;
 	height: 155px;}
-	
-#banner-wrap #slide-1, #banner-wrap #slide-2{
-	background: url(../img/banner.jpg);}
+
 #banner-close {
 	cursor: pointer;
 	width: 17px;
