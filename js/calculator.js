@@ -9,13 +9,13 @@ function changeUI (key) {
 	$("#menu-types LI").removeClass('active');
 	$("#menu-types ."+xProducts[key].aClass).parent('LI').addClass('active');
 	// Scroll до калькулятора/меню (но не для первого показа страницы)
-	if (!firstRun) {
-		$('html, body').animate({
-	        scrollTop: $("#"+key+"-button").offset().top-20
-	    }, 'fast');
-	} else {
-		firstRun = 0;
-	};
+	// if (!firstRun) {
+	// 	$('html, body').animate({
+	//         scrollTop: $("#"+key+"-button").offset().top-20
+	//     }, 'fast');
+	// } else {
+	// 	firstRun = 0;
+	// };
 	
 	return true;
 }
@@ -222,6 +222,18 @@ function xSetUI (sUi) {
 					if (aTemp[1] != null) sPaperDescr = '<em>' + aTemp[1] + '</em>';
 					$("<p>").html(sPaperName + (sPaperDescr ? "<br />" + sPaperDescr : '')).appendTo(paperBlock);
 
+					if (oPaper.comments) {
+						$(paperBlock).attr('title', oPaper.comments);
+						$(paperBlock).tooltipster({
+					      position: 'bottom',
+					      theme: 'tooltipster-shadow',
+					      maxWidth: 300
+					    });
+					    $(paperBlock).click(function() {
+					    	$(this).tooltipster('hide');
+					    });
+					}
+
 					$(paperBlock).appendTo('#' + key + '-choose');
 				}
 			}
@@ -260,7 +272,7 @@ function xSetUI (sUi) {
 }
 
 function xSetOption (key, value, renderInterface) {
-	console.log("Key: ", key, ", Value: ", value);
+	// console.log("Key: ", key, ", Value: ", value);
 
 	if (a[key]!=null) {
 		a[key].value = value;
@@ -1435,21 +1447,21 @@ var xProducts = {
 					time:"(parseFloat(a.laminating.value)>0)?12:0",
 					elemClass: "jqselect"
 			},
-			opaque:   {name:"Белила", 
-				type:"int", 
-				units:"краскопрогонов/экз.",
-				min:0, 
-				max:6, 
-				increment:1, 
-				value:0,
-				presets:[1,2],
-				price:"parseFloat(a.opaque.value)* xConst.oneOpaquePrice*(parseFloat(a.paper.overhead)+Math.ceil(parseFloat(a.qty.value)/xPerSheet(a.bleed.value)))",
-				time:"(parseFloat(a.opaque.value)>0)?6:0"
-			},
-			opaqueDelta:  {name:"Белила, печать",
-				type:"formula",
-				price:"parseFloat(a.opaque.value)* xConst.oneOpaquePrice*(parseFloat(a.paper.overhead)+Math.ceil(parseFloat(a.qty.value)/xPerSheet(a.bleed.value)))*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/xPerSheet(a.bleed.value)), 4.3, 1.85 )-1)"
-			},
+			// opaque:   {name:"Белила", 
+			// 	type:"int", 
+			// 	units:"краскопрогонов/экз.",
+			// 	min:0, 
+			// 	max:6, 
+			// 	increment:1, 
+			// 	value:0,
+			// 	presets:[1,2],
+			// 	price:"parseFloat(a.opaque.value)* xConst.oneOpaquePrice*(parseFloat(a.paper.overhead)+Math.ceil(parseFloat(a.qty.value)/xPerSheet(a.bleed.value)))",
+			// 	time:"(parseFloat(a.opaque.value)>0)?6:0"
+			// },
+			// opaqueDelta:  {name:"Белила, печать",
+			// 	type:"formula",
+			// 	price:"parseFloat(a.opaque.value)* xConst.oneOpaquePrice*(parseFloat(a.paper.overhead)+Math.ceil(parseFloat(a.qty.value)/xPerSheet(a.bleed.value)))*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/xPerSheet(a.bleed.value)), 4.3, 1.85 )-1)"
+			// },
 			rounding:  {name:"Скругление",  
 				type:"enum", 
 				value:0,
@@ -1556,18 +1568,18 @@ var xProducts = {
 
 //	Бумага
 var xMedia = {        
-	of80:      {name:"Офсетная бумага, 80г/м²",           price:1.82,     sides:2, size:"440×310мм", group:"Бумага"},
+	of80:      {name:"Офсетная бумага, 80г/м²",           price:1.82,     sides:2, size:"440×310мм", group:"Бумага", comments: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
 	of100:      {name:"Офсетная бумага, 100г/м²",           price:2.27,     sides:2, size:"440×310мм", group:"Бумага"},
 	sc120:      {name:"Матовая меловка, 120г/м²",           price:1.30,     sides:2, size:"440×310мм", group:"Бумага"},
 	<!-- gc120:      {name:"Глянцевая меловка, 120г/м²",         price:1.85,     sides:2, size:"440×310мм", group:"Бумага"}, -->
 	sc140:      {name:"Матовая меловка, 140г/м²",           price:1.40,     sides:2, size:"440×310мм", group:"Бумага"}, 
 	<!-- gc140:      {name:"Глянцевая меловка, 140г/м²",         price:1.74,     sides:2, size:"440×310мм", group:"Бумага"},  -->
 	<!-- sc157:      {name:"Матовая меловка, 160г/м²",          price:2.20,     sides:2, size:"440×310мм", group:"Бумага"}, -->
-	gc157:      {name:"Глянцевая меловка, 150г/м²",         price:1.60,     sides:2, size:"440×310мм", group:"Бумага"},
+	gc157:      {name:"Глянцевая меловка, 150г/м²",         price:1.60,     sides:2, size:"440×310мм", group:"Бумага", comments: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
 	sc250:      {name:"Матовая меловка, 200г/м²",           price:4.50,     sides:2, size:"440×310мм", group:"Бумага"},
 	gc250:      {name:"Глянцевая меловка, 200г/м²",         price:4.50,     sides:2, size:"440×310мм", group:"Бумага"},
 	sc300:      {name:"Глянцевая меловка, 300г/м²",         price:5.90,     sides:2, size:"440×310мм", group:"Бумага"},
-	mt300:      {name:"Матовая меловка, 300г/м²",         price:5.90,     sides:2, size:"440×310мм", group:"Бумага"},
+	mt300:      {name:"Матовая меловка, 300г/м²",         price:5.90,     sides:2, size:"440×310мм", group:"Бумага", comments: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
 	w70705:      {name:"Фотобумага, E-Photo 190г/м²",         price:16.00,     sides:2, size:"440×310мм", group:"Бумага"},
 	w70706:      {name:"Фотобумага, E-Photo 260г/м²",         price:18.00,     sides:2, size:"440×310мм", group:"Бумага"},
 	pw225:      {name:"Синтетика PICOFILM 255 г/м3",         price:140.00,     sides:2, size:"430×310мм", group:"Бумага"},
