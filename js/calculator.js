@@ -9,14 +9,18 @@ function changeUI (key) {
 	$("#menu-types LI").removeClass('active');
 	$("#menu-types ."+xProducts[key].aClass).parent('LI').addClass('active');
 	// Scroll до калькулятора/меню (но не для первого показа страницы)
-	// if (!firstRun) {
-	// 	$('html, body').animate({
-	//         scrollTop: $("#"+key+"-button").offset().top-20
-	//     }, 'fast');
-	// } else {
-	// 	firstRun = 0;
-	// };
-	
+	var menuHeight = parseInt($("#menu-types").height());
+	var footerHeight = parseInt($("#footer").height());
+	var windowHeight = parseInt($(window).height());
+
+	if (!firstRun) {
+		$('html, body').animate({ scrollTop: $("#menu-types").offset().top - 37 }, 'fast');
+	} else {
+		firstRun = 0;
+	};
+	//	149 - sum for margins
+	$("div.col-properties").css('min-height', (windowHeight - menuHeight - footerHeight - 149) + 'px');
+
 	return true;
 }
 
