@@ -309,6 +309,9 @@ function xSetOption (key, value, renderInterface) {
 
 			//	Закрываем список
 			$.fancybox.close();
+
+			//	Скролл к меню печатной продукции
+			$('html, body').animate({ scrollTop: $("#menu-types").offset().top - 37 }, 'fast');
 		};
 	}
 
@@ -1571,93 +1574,93 @@ var xProducts = {
 }
 
 //	Бумага
-var xMedia = {        
-	of80:      {name:"Офсетная бумага, 80г/м²",           price:1.82,     sides:2, size:"440×310мм", group:"Бумага", comments: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
-	of100:      {name:"Офсетная бумага, 100г/м²",           price:2.27,     sides:2, size:"440×310мм", group:"Бумага"},
-	sc120:      {name:"Матовая меловка, 120г/м²",           price:1.30,     sides:2, size:"440×310мм", group:"Бумага"},
-	<!-- gc120:      {name:"Глянцевая меловка, 120г/м²",         price:1.85,     sides:2, size:"440×310мм", group:"Бумага"}, -->
-	sc140:      {name:"Матовая меловка, 140г/м²",           price:1.40,     sides:2, size:"440×310мм", group:"Бумага"}, 
-	<!-- gc140:      {name:"Глянцевая меловка, 140г/м²",         price:1.74,     sides:2, size:"440×310мм", group:"Бумага"},  -->
-	<!-- sc157:      {name:"Матовая меловка, 160г/м²",          price:2.20,     sides:2, size:"440×310мм", group:"Бумага"}, -->
-	gc157:      {name:"Глянцевая меловка, 150г/м²",         price:1.60,     sides:2, size:"440×310мм", group:"Бумага", comments: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
-	sc250:      {name:"Матовая меловка, 200г/м²",           price:4.50,     sides:2, size:"440×310мм", group:"Бумага"},
-	gc250:      {name:"Глянцевая меловка, 200г/м²",         price:4.50,     sides:2, size:"440×310мм", group:"Бумага"},
-	sc300:      {name:"Глянцевая меловка, 300г/м²",         price:5.90,     sides:2, size:"440×310мм", group:"Бумага"},
-	mt300:      {name:"Матовая меловка, 300г/м²",         price:5.90,     sides:2, size:"440×310мм", group:"Бумага", comments: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
-	w70705:      {name:"Фотобумага, E-Photo 190г/м²",         price:16.00,     sides:2, size:"440×310мм", group:"Бумага"},
-	w70706:      {name:"Фотобумага, E-Photo 260г/м²",         price:18.00,     sides:2, size:"440×310мм", group:"Бумага"},
-	pw225:      {name:"Синтетика PICOFILM 255 г/м3",         price:140.00,     sides:2, size:"430×310мм", group:"Бумага"},
-	np:      {name:"Без бумаги",         price:0.00,     sides:2, size:"430×310мм", group:"Бумага"},
-	
-	//Двустронний картон
-	<!--  gco310:   {name:"Картон Crystal Board, 300г/м²",          price:4.56,     sides:2, size:"464×320мм", group:"Картон"}, -->
-	<!--  cbr350:     {name:"Картон Crystal Board, 350г/м²",    price:4.34,     sides:2, size:"464×320мм", group:"Картон"}, -->
-	c0001580:   {name:"Картон Splendorlux, 250г/м²",   price:28.00,    sides:2, size:"464×320мм", group:"Картон"},
-	<!-- c0001507:   {name:"Картон Symbol Freelife, 300г/м²",   price:14.9,    sides:2, size:"464×320мм", group:"Картон"}, -->
-	c0001418:   {name:"Картон Tintoretto Gesso, 250г/м²",   price:29.5,    sides:2, size:"464×320мм", group:"Картон"},
-	c0001551:   {name:"Картон Nettuno BCO Art, 280г/м²",    price:34.0,    sides:2, size:"464×320мм", group:"Картон"},
-	c0001325:   {name:"Constellation Snow Tella, 280г/м²",    price:34.5,    sides:2, size:"464×320мм", group:"Картон"},
-	c0001334:   {name:"Картон Aquarello Avorio, 280г/м²",   price:32.5,    sides:2, size:"464×320мм", group:"Картон"},
-	<!--c0001335:   {name:"Картон Aquarello Avorio, 160г/м²",   price:12.6,    sides:2, size:"464×320мм", group:"Картон"},-->
-	c0001319:   {name:"Картон Marina Conciglione, 240г/м²", price:29.50,    sides:2, size:"464×320мм", group:"Картон"},
-	c0001572:   {name:"Картон Sirio Pearl Oyster Shell, 300г/м²", price:50.5,    sides:2, size:"464×320мм", group:"Картон"},
-	c0001575:   {name:"Картон Sirio Pearl Oyster Shell, 125г/м²", price:22.5,    sides:2, size:"464×320мм", group:"Картон"},
-	<!--   cbr270:   {name:"Картон Crystal Board, 270г/м²",         price:3.28,     sides:2, size:"464×320мм", group:"Картон"},  -->
-	cbr300:   {name:"Картон 2 стороны, 300г/м²",        price:7.50,     sides:2, size:"464×320мм", group:"Картон"}, 
-	c10001563:   {name:"Картон Woodstock Betulla, 300г/м²", price:30.5,    sides:2, size:"464×320мм", group:"Картон"},
-	c0001573:   {name:"Картон Sirio Pearl Polar Down, 300г/м²", price:50.5,    sides:2, size:"464×320мм", group:"Картон"},
-	c0001574:   {name:"Картон Sirio Pearl Polar Down, 125г/м²", price:22.5,    sides:2, size:"464×320мм", group:"Картон"},
-	c0001570:   {name:"Картон Sirio Pearl Aurium, 300г/м²",   price:60.5,    sides:2, size:"464×320мм", group:"Картон"},
-	c0001571:   {name:"Картон Sirio Pearl Platinum, 300г/м²",price:60.5,   sides:2, size:"464×320мм", group:"Картон"},
-	<!-- yb200:   {name:"Синтетика Yapo Blue 200 г/м2",price:20.65,   sides:2, size:"450×320мм", group:"Картон"}, -->
-	<!-- endgold200:   {name:"Бумага ENDURO GOLD 75 г/м²",price:29.25,   sides:2, size:"464×320мм", group:"Картон"}, -->
-	spg300:   {name:"Картон Splendorgel, 300 г/м2",   price:30.5,    sides:2, size:"464×320мм", group:"Картон"},
-	<!-- c0028824:   {name:"Картон Savile Row Tweed Camel, 300г/м²",price:20.35,   sides:2, size:"450×320мм", group:"Картон"}, -->
-	
-	
-	//Односторонний картон      
-	gsk160:   {name:"Калька GSK ExtraWhite, 110г/м²",price:25.5,   sides:1, size:"464×320мм", group:"Картон"},
-	<!-- glama150:   {name:"Калька Glama Digit, 150г/м²",price:25.50,   sides:1, size:"464×320мм", group:"Картон"},-->
-	<!--   cpa270:   {name:"Картон Crystal Pack, 270г/м²",   price:2.99,    sides:1, size:"464×320мм", group:"Картон"}, -->
-	<!-- cpa295:   {name:"Картон 1 сторона, 300г/м²",   price:4.76,    sides:1, size:"464×320мм", group:"Картон"},-->
-	<!-- pt135:      {name:"Синтетика прозр Picofilm 225 г/м3",         price:100.00,     sides:2, size:"430×310мм", group:"Бумага"},-->
-	
-	//Самоклейка
-	
-	adest2:   {name:"Самоклейка Adestor Gloss Perm., 195г/м²",price:13.5,         sides:1, size:"464×320мм", group:"Самоклейка"},
-	yupotako:   {name:"Yupo Tako синтетика лип, 170г/м²",price:130,         sides:1, size:"460×320мм", group:"Самоклейка"},
+var xMedia = {
+	of80:      {name:"Офсетная бумага, 80г/м²",           price:1.82,     sides:2, size:"440×310мм", group:"Бумага", comments: ""},
+    of100:      {name:"Офсетная бумага, 100г/м²",           price:2.00,     sides:2, size:"440×310мм", group:"Бумага"},
+    <!-- sc120:      {name:"Матовая меловка, 120г/м²",           price:1.30,     sides:2, size:"440×310мм", group:"Бумага"}, -->
+    <!-- gc120:      {name:"Глянцевая меловка, 120г/м²",         price:1.85,     sides:2, size:"440×310мм", group:"Бумага"}, -->
+    sc140:      {name:"Матовая меловка, 130г/м²",           price:1.72,     sides:2, size:"440×310мм", group:"Бумага"},
+    <!-- gc140:      {name:"Глянцевая меловка, 140г/м²",         price:1.74,     sides:2, size:"440×310мм", group:"Бумага"},  -->
+    <!-- sc157:      {name:"Матовая меловка, 160г/м²",          price:2.20,     sides:2, size:"440×310мм", group:"Бумага"}, -->
+    gc157:      {name:"Глянцевая меловка, 150г/м²",         price:1.90,     sides:2, size:"440×310мм", group:"Бумага"},
+    sc250:      {name:"Матовая меловка, 200г/м²",           price:4.50,     sides:2, size:"440×310мм", group:"Бумага"},
+    gc250:      {name:"Глянцевая меловка, 200г/м²",         price:4.50,     sides:2, size:"440×310мм", group:"Бумага"},
+    sc300:      {name:"Глянцевая меловка, 300г/м²",         price:5.90,     sides:2, size:"440×310мм", group:"Бумага"},
+    mt300:      {name:"Матовая меловка, 300г/м²",         price:5.90,     sides:2, size:"440×310мм", group:"Бумага"},
+    w70705:      {name:"Фотобумага, E-Photo 190г/м²",         price:16.00,     sides:2, size:"440×310мм", group:"Бумага"},
+    w70706:      {name:"Фотобумага, E-Photo 260г/м²",         price:18.00,     sides:2, size:"440×310мм", group:"Бумага"},
+    pw225:      {name:"Синтетика PICOFILM 255 г/м3",         price:140.00,     sides:2, size:"430×310мм", group:"Бумага"},
+    np:      {name:"Без бумаги",         price:0.00,     sides:2, size:"430×310мм", group:"Бумага"},
 
-	//Тёмный картон
-	<!--   c10022460:{name:"Картон Sirio Black, 290г/м²",price:13.87,   sides:2, size:"464×320мм", group:"ТёмныйКартон"} -->
+    //Двустронний картон
+    <!--  gco310:   {name:"Картон Crystal Board, 300г/м²",          price:4.56,     sides:2, size:"464×320мм", group:"Картон"}, -->
+    <!--  cbr350:     {name:"Картон Crystal Board, 350г/м²",    price:4.34,     sides:2, size:"464×320мм", group:"Картон"}, -->
+    c0001580:   {name:"Картон Splendorlux, 250г/м²",   price:28.00,    sides:2, size:"464×320мм", group:"Картон"},
+    <!-- c0001507:   {name:"Картон Symbol Freelife, 300г/м²",   price:14.9,    sides:2, size:"464×320мм", group:"Картон"}, -->
+    c0001418:   {name:"Картон Tintoretto Gesso, 250г/м²",   price:32.5,    sides:2, size:"464×320мм", group:"Картон"},
+    c0001551:   {name:"Картон Nettuno BCO Art, 280г/м²",    price:34.0,    sides:2, size:"464×320мм", group:"Картон"},
+    c0001325:   {name:"Constellation Snow Tella, 280г/м²",    price:34.5,    sides:2, size:"464×320мм", group:"Картон"},
+    c0001334:   {name:"Картон Aquarello Avorio, 280г/м²",   price:32.5,    sides:2, size:"464×320мм", group:"Картон"},
+    <!--c0001335:   {name:"Картон Aquarello Avorio, 160г/м²",   price:12.6,    sides:2, size:"464×320мм", group:"Картон"},-->
+    c0001319:   {name:"Картон Marina Conciglione, 240г/м²", price:29.50,    sides:2, size:"464×320мм", group:"Картон"},
+    c0001572:   {name:"Картон Sirio Pearl Oyster Shell, 300г/м²", price:60.5,    sides:2, size:"464×320мм", group:"Картон"},
+    c0001575:   {name:"Картон Sirio Pearl Oyster Shell, 125г/м²", price:22.5,    sides:2, size:"464×320мм", group:"Картон"},
+    <!--   cbr270:   {name:"Картон Crystal Board, 270г/м²",         price:3.28,     sides:2, size:"464×320мм", group:"Картон"},  -->
+    cbr300:   {name:"Картон 2 стороны, 300г/м²",        price:7.5,     sides:2, size:"464×320мм", group:"Картон"},
+    c10001563:   {name:"Картон Woodstock Betulla, 300г/м²", price:35.5,    sides:2, size:"464×320мм", group:"Картон"},
+    c0001573:   {name:"Картон Sirio Pearl Polar Down, 300г/м²", price:60.5,    sides:2, size:"464×320мм", group:"Картон"},
+    c0001574:   {name:"Картон Sirio Pearl Polar Down, 125г/м²", price:22.5,    sides:2, size:"464×320мм", group:"Картон"},
+    c0001570:   {name:"Картон Sirio Pearl Aurium, 300г/м²",   price:70.5,    sides:2, size:"464×320мм", group:"Картон"},
+    c0001571:   {name:"Картон Sirio Pearl Platinum, 300г/м²",price:70.5,   sides:2, size:"464×320мм", group:"Картон"},
+    <!-- yb200:   {name:"Синтетика Yapo Blue 200 г/м2",price:20.65,   sides:2, size:"450×320мм", group:"Картон"}, -->
+    <!-- endgold200:   {name:"Бумага ENDURO GOLD 75 г/м²",price:29.25,   sides:2, size:"464×320мм", group:"Картон"}, -->
+    spg300:   {name:"Картон Splendorgel, 300 г/м2",   price:30.5,    sides:2, size:"464×320мм", group:"Картон"},
+    <!-- c0028824:   {name:"Картон Savile Row Tweed Camel, 300г/м²",price:20.35,   sides:2, size:"450×320мм", group:"Картон"}, -->
+
+
+    //Односторонний картон
+    gsk160:   {name:"Калька GSK ExtraWhite, 110г/м²",price:20.0,   sides:1, size:"464×320мм", group:"Картон"},
+    <!-- glama150:   {name:"Калька Glama Digit, 150г/м²",price:25.50,   sides:1, size:"464×320мм", group:"Картон"},-->
+    <!--   cpa270:   {name:"Картон Crystal Pack, 270г/м²",   price:2.99,    sides:1, size:"464×320мм", group:"Картон"}, -->
+    <!-- cpa295:   {name:"Картон 1 сторона, 300г/м²",   price:4.76,    sides:1, size:"464×320мм", group:"Картон"},-->
+    <!-- pt135:      {name:"Синтетика прозр Picofilm 225 г/м3",         price:100.00,     sides:2, size:"430×310мм", group:"Бумага"},-->
+
+    //Самоклейка
+
+    adest2:   {name:"Самоклейка Adestor Gloss Perm., 195г/м²",price:13.5,         sides:1, size:"464×320мм", group:"Самоклейка"},
+    yupotako:   {name:"Yupo Tako синтетика лип, 170г/м²",price:130,         sides:1, size:"460×320мм", group:"Самоклейка"},
+
+    //Тёмный картон
+    <!--   c10022460:{name:"Картон Sirio Black, 290г/м²",price:13.87,   sides:2, size:"464×320мм", group:"ТёмныйКартон"} -->
 }
 
 var xConst = {
-	basePrice:      1.58,    
-	deliveryArkh:   100,    
-	paperMarkup:    0.3,    
-	oneCut:         1.2,      
-	priceRoundingBase: 1,   
-	timeRoundingBase:0.5,   
-	oneFoldPrice: 0.2,      
-	oneSideLaminationPrice:5,
-	oneCreasingPrice: 0.6,    
-	maxX:437,
-	maxY:308,
-	oneCalendarAssembly:10,
-	oneTearOffQuarter:20,
-	oneQuarterCalendCompo:6.6,
-	oneWireOPrice:1.6,
-	oneRoundingPrice:0.15,
-	oneBindPrice:{
-		glue:20,
-		stitch:5,
-		wireo:15
-	},
-	oneRiegelPrice:10,
-	onePersonalisationPrice:1,
-	oneOpaquePrice:2.5,
-	markup:0.18,
-	float1000:function (qty0,highK,lowK) {
+    basePrice: 1.55,
+    deliveryArkh: 100,
+    paperMarkup: 0.3,
+    oneCut: 1.2,
+    priceRoundingBase: 1,
+    timeRoundingBase: 0.5,
+    oneFoldPrice: 0.2,
+    oneSideLaminationPrice: 5,
+    oneCreasingPrice: 0.6,
+    maxX: 437,
+    maxY: 308,
+    oneCalendarAssembly: 10,
+    oneTearOffQuarter: 20,
+    oneQuarterCalendCompo: 6.6,
+    oneWireOPrice: 1.6,
+    oneRoundingPrice: 0.15,
+    oneBindPrice: {
+        glue: 20,
+        stitch: 5,
+        wireo: 15
+    },
+    oneRiegelPrice: 10,
+    onePersonalisationPrice: 1,
+    oneOpaquePrice: 2.5,
+    markup: 0.18,
+    float1000:function (qty0,highK,lowK) {
 		var qty = parseInt(qty0);
 		if (highK==lowK || isNaN(qty) || qty<1) return highK;
 		if (qty >= 1000) return lowK-0.2;
