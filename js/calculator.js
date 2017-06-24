@@ -614,7 +614,7 @@ var xProducts = {
 	brochure: {
 		name:   "Многолистовое издание",
 		title:  "Многостраничные издания", 
-		desc:   "a.qty.value+ ' экз. Формат '+a.size.title+', объём '+a.pages.value+'&nbsp;стр. плюс обложки. Переплёт&nbsp;– '+a.bind.title+'.<br/><b>Обложка:</b> ' + a.color.title + ', ' + xDecap(a.paper.title) + ((a.laminating.value!=0)?((a.laminating.value==1)?', <b class=\"red\">односторонняя ламинация</b>':', <b class=\"red\">двусторонняя ламинация</b>'):'')+ '. <br /><b>Страницы: </b> '+ a.color1.title + ', ' + xDecap(a.paper1.title) + '. <br />Срок исполнения&nbsp;– ' + ((x.time<1.1)?'сутки.':x.time+'&nbsp;р/дн.') + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
+		desc:   "a.qty.value+ ' экз. Формат '+a.size.title+', объём '+a.pages.value+'&nbsp;стр. плюс обложки. Переплёт&nbsp;– '+a.bind.title+'.<br/><b>Обложка:</b> ' + a.color.title + ', ' + xDecap(a.paper.title) + ((a.laminating.value!=0)?((a.laminating.value==1)?', <b class=\"red\">односторонняя ламинация</b>':', <b class=\"red\">двусторонняя ламинация</b>'):'')+ '. <br /><b>Страницы: </b> '+ a.color1.title + ', ' + xDecap(a.paper1.title) + ((a.laminating1.value!=0)?((a.laminating1.value==1)?', <b class=\"red\">односторонняя ламинация</b>':', <b class=\"red\">двусторонняя ламинация</b>'):'')+ '. <br />Срок исполнения&nbsp;– ' + ((x.time<1.1)?'сутки.':x.time+'&nbsp;р/дн.') + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
 		picUrl: "http://liteprint.me/i/calc/brochure.jpg",             //URL картинки
 		aClass: "type-multi",
 		err:    "'Допустимые тиражи от '+a.qty.min+' до '+a.qty.max+' '+a.qty.units+'",
@@ -690,7 +690,8 @@ var xProducts = {
 					title:"нет",
 					options:[
 						{title:"нет", v:"0"},
-						{title:"односторонняя", v:"1"}
+						{title:"односторонняя", v:"1"},
+						{title:"двухсторонняя", v:"2"}
 					],
 					price:"xConst.oneSideLaminationPrice * parseFloat(a.laminating.value)*(parseFloat(a.paper.overhead)+Math.ceil( 2*parseFloat(a.qty.value)/parseFloat(a.size.value)))",
 					time:"(parseFloat(a.laminating.value)>0)?12:0",
@@ -723,7 +724,7 @@ var xProducts = {
 			},
 			paper1: {name:"Страницы",
 					type:"paper",
-					groups:"Бумага",
+					groups:"Бумага,Картон",
 					value:"gc157",
 					title:"Глянцевая меловка, 160г/м²",
 					sidesVar:"color1",
@@ -731,6 +732,19 @@ var xProducts = {
 					qty:"Math.ceil( parseFloat(a.qty.value)*parseFloat(a.pages.value)/(2*parseFloat(a.size.value)))",
 					overhead:"10", // Проценты
 					overheadFormula:"Math.ceil( parseFloat(a.paper1.overhead)*parseFloat(a.pages.value)/(2*parseFloat(a.size.value)))"
+			},
+			laminating1:  {name:"Лами&shy;на&shy;ци&shy;я страниц",
+					type:"enum", 
+					value:0,
+					title:"нет",
+					options:[
+						{title:"нет", v:"0"},
+						{title:"односторонняя", v:"1"},
+						{title:"двусторонняя", v:"2"}
+					],
+					price:"xConst.oneSideLaminationPrice * parseFloat(a.laminating1.value)*(parseFloat(a.paper.overhead)+Math.ceil(parseFloat(a.qty.value)/parseFloat(a.size.value)))",
+					time:"(parseFloat(a.laminating1.value)>0)?12:0",
+					elemClass: "jqselect"
 			},
 			paperMarkup: {name:"Наценка на бумагу",
 					type:"formula",
@@ -743,7 +757,9 @@ var xProducts = {
 					options:[
 						{title:"клей", v:"glue"},
 						{title:"скрепка", v:"stitch"},
-						{title:"пружина", v:"wireo"}
+						{title:"пружина", v:"wireo"},
+						{title:"2 болта", v:"2bolts"},
+						{title:"3 болта", v:"3bolts"}
 					],
 					price: "xConst.oneBindPrice[a.bind.value]*(parseFloat(a.paper.overhead)+parseFloat(a.qty.value))",
 					elemClass: "jqselect"
@@ -1356,7 +1372,7 @@ var xProducts = {
 	general: {
 		name:   "Печатная продукция",
 		title:  "Универсальный расчёт", 
-		desc:   "a.qty.value+ ' экз. Формат ' + a.sizeX.value + '×' + a.sizeY.value + '&nbsp;мм (' + xPerSheet(a.bleed.value) + ' на листе), печать ' + a.color.title + ', ' + xDecap(a.paper.title) + '. '+((a.folds.value=='0')?'':'Сгибы&nbsp;– '+a.folds.value+' на экз. ')+((a.creasing.value=='0')?'':'Биговка&nbsp;– '+a.creasing.value+' на экз. ')+ ((a.glue.value=='0')?'':'Склейка&nbsp;– '+a.glue.value+'&nbsp;экз. ') + ((a.wireo.value=='0')?'':'Переплёт на пружину&nbsp;– '+a.wireo.value+'&nbsp;экз. ') + ((a.laminating.value!=0)?((a.laminating.value==1)?' <b class=\"red\">Односторонняя ламинация.</b>':' <b class=\"red\">Двусторонняя ламинация.</b>'):'')+((a.rounding.value!=0)?' Кругление '+a.rounding.title+'.':'')+'<br />Срок исполнения&nbsp;– ' + ((x.time<1.1)?'сутки.':x.time+'&nbsp;р/дн.') + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
+		desc:   "a.qty.value+ ' экз. Формат ' + a.sizeX.value + '×' + a.sizeY.value + '&nbsp;мм (' + xPerSheet(a.bleed.value) + ' на листе), печать ' + a.color.title + ', ' + xDecap(a.paper.title) + '. '+((a.folds.value=='0')?'':'Сгибы&nbsp;– '+a.folds.value+' на экз. ')+((a.creasing.value=='0')?'':'Биговка&nbsp;– '+a.creasing.value+' на экз. ')+ ((a.glue.value=='0')?'':'Склейка&nbsp;– '+a.glue.value+'&nbsp;экз. ') + ((a.wireo.value=='0')?'':'Переплёт на пружину&nbsp;– '+a.wireo.value+'&nbsp; '+a.wireo.units+' 	') + ((a.bolts.value=='0')?'':'Переплёт на болты&nbsp;– '+a.bolts.value+'&nbsp;'+a.bolts.units+' ') + ((a.laminating.value!=0)?((a.laminating.value==1)?' <b class=\"red\">Односторонняя ламинация.</b>':' <b class=\"red\">Двусторонняя ламинация.</b>'):'')+((a.rounding.value!=0)?' Кругление '+a.rounding.title+'.':'')+'<br />Срок исполнения&nbsp;– ' + ((x.time<1.1)?'сутки.':x.time+'&nbsp;р/дн.') + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
 		picUrl: "http://liteprint.me/i/calc/general.gif",             //URL картинки
 		aClass: "type-universal",
 		err:    "'Допустимые тиражи от '+a.qty.min+' до '+a.qty.max+' '+a.qty.units+' Максимальный размер '+a.sizeX.max+'×'+a.sizeY.max+'&nbsp;мм, минимальный –&nbsp;'+a.sizeX.min+'×'+a.sizeY.min+'&nbsp;мм.'",
@@ -1514,13 +1530,24 @@ var xProducts = {
 			},
 			wireo:   {name:"Пружинка", 
 				type:"int", 
-				units:"экз.",
+				units:"шт.",
 				min:0, 
 				max:99999, 
 				increment:1, 
 				value:0,
 				price:"parseFloat(a.wireo.value)* xConst.oneBindPrice['wireo']",
 				time:"(parseFloat(a.wireo.value)>0)?24:0"
+			},
+			bolts: {
+				name: "Болты", 
+				type: "int", 
+				units: "шт.",
+				min:0, 
+				max:99999, 
+				increment:1, 
+				value:0,
+				price:"parseFloat(a.bolts.value)* xConst.oneBindPrice['bolt']",
+				time:"(parseFloat(a.bolts.value)>0)?24:0"
 			},
 			personalisation:   {name:"Персо&shy;на&shy;ли&shy;зация", 
 				type:"int", 
@@ -1655,7 +1682,10 @@ var xConst = {
     oneBindPrice: {
         glue: 20,
         stitch: 5,
-        wireo: 15
+        wireo: 15,
+        bolt: 15,
+        '2bolts': 30,
+        '3bolts': 35
     },
     oneRiegelPrice: 10,
     onePersonalisationPrice: 1,
