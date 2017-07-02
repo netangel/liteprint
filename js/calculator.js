@@ -691,7 +691,7 @@ var xProducts = {
 					options:[
 						{title:"нет", v:"0"},
 						{title:"односторонняя", v:"1"},
-						{title:"двухсторонняя", v:"2"}
+						{title:"двусторонняя", v:"2"}
 					],
 					price:"xConst.oneSideLaminationPrice * parseFloat(a.laminating.value)*(parseFloat(a.paper.overhead)+Math.ceil( 2*parseFloat(a.qty.value)/parseFloat(a.size.value)))",
 					time:"(parseFloat(a.laminating.value)>0)?12:0",
@@ -1685,7 +1685,7 @@ var xConst = {
         wireo: 15,
         bolt: 15,
         '2bolts': 30,
-        '3bolts': 35
+        '3bolts': 45
     },
     oneRiegelPrice: 10,
     onePersonalisationPrice: 1,
