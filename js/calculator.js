@@ -483,7 +483,8 @@ var xProducts = {
 			},
 			printDelta:  {name:"Печать",
 				type:"formula",
-				price:"price*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/parseFloat(a.size.value)), 4.3, 1.85 )-1)"
+				price:"price*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/parseFloat(a.size.value)), 2.4, 0.70 ))"
+				// price:"price*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/parseFloat(a.size.value)), 4.3, 1.85 )-1)"
 			},
 			ops:    {name:"Обслуживание",
 					type:"formula",
@@ -630,7 +631,7 @@ var xProducts = {
 			},
 			printDelta:  {name:"Печать",
 				type:"formula",
-				price:"price*(xConst.float1000(Math.ceil(2*parseFloat(a.qty.value)/parseFloat(a.size.value)) + Math.ceil(parseFloat(a.qty.value)*parseFloat(a.pages.value)/(2*parseFloat(a.size.value))) + Math.ceil(parseFloat(a.paper1.overhead)*parseFloat(a.pages.value)/(2*parseFloat(a.size.value))), 4.3, 1.85 )- 1)"
+				price:"price*(xConst.float1000(Math.ceil(2*parseFloat(a.qty.value)/parseFloat(a.size.value)) + Math.ceil(parseFloat(a.qty.value)*parseFloat(a.pages.value)/(2*parseFloat(a.size.value))) + Math.ceil(parseFloat(a.paper1.overhead)*parseFloat(a.pages.value)/(2*parseFloat(a.size.value))), 2.4, 0.7 ))"
 			},
 			ops:    {name:"Обслуживание",
 					type:"formula",
@@ -804,7 +805,7 @@ var xProducts = {
 			},
 			printDelta:  {name:"Печать",
 				type:"formula",
-				price:"price*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/parseFloat(a.size.value)), 4.3, 1.85 )-1)"
+				price:"price*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/parseFloat(a.size.value)), 2.4, 0.7))"
 			},
 			ops:    {name:"Обслуживание",
 					type:"formula",
@@ -1185,7 +1186,7 @@ var xProducts = {
 			},
 			printDelta:  {name:"Печать",
 				type:"formula",
-				price:"price*(xConst.float1000( Math.ceil((parseFloat(a.qty.value)*parseFloat(a.pages.value))/parseFloat(a.size.value)), 4.3, 1.85 )-1)"
+				price:"price*(xConst.float1000( Math.ceil((parseFloat(a.qty.value)*parseFloat(a.pages.value))/parseFloat(a.size.value)), 2.4, 0.7 ))"
 			},
 			ops:    {name:"Обслуживание",
 					type:"formula",
@@ -1367,7 +1368,7 @@ var xProducts = {
 			},
 			printDelta:  {name:"Печать",
 				type:"formula",
-				price:"price*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/xPerSheet(a.bleed.value)), 4.3, 1.85 )-1)"
+				price:"price*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/xPerSheet(a.bleed.value)), 2.4, 0.7 ))"
 			},
 			ops:    {name:"Обслуживание",
 					type:"formula",
@@ -1663,8 +1664,8 @@ var xConst = {
     float1000:function (qty0,highK,lowK) {
 		var qty = parseInt(qty0);
 		if (highK==lowK || isNaN(qty) || qty<1) return highK;
-		if (qty >= 1000) return lowK-0.2;
-		var k = (1.284697726*(Math.pow(qty/500+1,-1.383)-0.21884735))*(highK-lowK) + lowK;
+		if (qty >= 1000) return lowK-0.5;
+		var k = 0.70383349 + 2.26120533*(Math.pow(qty/500+1,-16.5383228));//*(highK-lowK) + lowK;
 		if (k>highK) k=highK;
 		if (k<lowK) k=lowK;
 		return k;
