@@ -154,24 +154,30 @@
       <div class="empty"></div>
       <!-- Элементы калькулятора -->
       <form id="xCalc">
-        <div class="col-paper" style="clear:left;"> 
-          <div id="product-paper">
-            <span class="paper-header">
-              <a href="javascript://" class="paper-header" data-fancybox-href="#paper-choose"></a>
-            </span>
-            <a href="javascript://" class="btn-more" data-fancybox-href="#paper-choose"></a>
-            <div class="paper-block fancybox" data-fancybox-href="#paper-choose"><p></p></div>
+        <div style="width:701px;float:left;">
+          <div class="col-buttons"></div>
+          <div class="col-paper" style="clear:left;">
+            <div id="product-paper">
+              <span class="paper-header">
+                <a href="javascript://" class="paper-header" data-fancybox-href="#paper-choose"></a>
+              </span>
+              <a href="javascript://" class="btn-more" data-fancybox-href="#paper-choose"></a>
+              <div class="paper-block fancybox" data-fancybox-href="#paper-choose"><p></p></div>
+            </div>
+            <br />
+            <div id="product-paper1" style="display:none;">
+              <span class="paper-header">
+                <a href="javascript://" class="paper-header" data-fancybox-href="#paper1-choose"></a>
+              </span>
+              <a href="javascript://" class="btn-more" data-fancybox-href="#paper1-choose"></a>
+              <div class="paper-block fancybox" data-fancybox-href="#paper1-choose"><p></p></div>
+            </div>
+            <div id="product-category">
+              <div class="fancybox" data-fancybox-href="#category-preview"><p class='category-preview'></p></div>
+            </div>
           </div>
-          <br />
-          <div id="product-paper1" style="display:none;">
-            <span class="paper-header">
-              <a href="javascript://" class="paper-header" data-fancybox-href="#paper1-choose"></a>
-            </span>
-            <a href="javascript://" class="btn-more" data-fancybox-href="#paper1-choose"></a>
-            <div class="paper-block fancybox" data-fancybox-href="#paper1-choose"><p></p></div>
-          </div>
+          <div class="col-properties"></div>
         </div>
-        <div class="col-properties"></div>
         <div class="col-price"> <!-- <a href="#" class="btn-delete"></a> -->
           <p class="price price-full"></p>
           <p class="price price-one"></p>
@@ -193,6 +199,7 @@
 <!-- </div> -->
 <div id="paper-choose"></div>
 <div id="paper1-choose"></div>
+<div id="category-preview"></div>
 
 </body>
 </html>
