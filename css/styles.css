@@ -198,32 +198,36 @@ H1 {
 	color: #111;
 }
 #menu-types .type-list {
-	width: 110px;
-	margin-left: 15px;
+	width: 100px;
+	/*margin-left: 15px;*/
 }
 #menu-types .type-multi {
 	background-position: center -150px;
-	width: 164px;
+	width: 146px;
 }
 #menu-types .type-buklet {
 	background-position: center -300px;
-	width: 110px;
+	width: 100px;
 }
 #menu-types .type-card {
 	background-position: center -450px;
-	width: 164px;
+	width: 126px;
 }
 #menu-types .type-calendar {
-	background-position: center -600px;
-	width: 110px
+	background: url(../img/calendar_off.png) no-repeat center top;
+	width: 100px
+}
+#menu-types .type-calendar-lite {
+	background: url(../img/calendar_lite_off.png) no-repeat center top;
+	width: 146px;
 }
 #menu-types .type-spine {
 	background-position: center -750px;
-	width: 164px;
+	width: 110px;
 }
 #menu-types .type-universal {
-	background-position: center -900px;
-	width: 102px;
+	background: url(../img/universal_calc_off.png) no-repeat center top;
+	width: 110px;
 }
 #menu-types .type-list:hover, #menu-types LI.active .type-list {
 	background-position: center -1050px;
@@ -238,13 +242,16 @@ H1 {
 	background-position: center -1500px;
 }
 #menu-types .type-calendar:hover, #menu-types LI.active .type-calendar {
-	background-position: center -1650px;
+	background: url(../img/calendar_on.png) no-repeat center top;
+}
+#menu-types .type-calendar-lite:hover, #menu-types LI.active .type-calendar-lite {
+	background: url(../img/calendar_lite_on.png) no-repeat center top;
 }
 #menu-types .type-spine:hover, #menu-types LI.active .type-spine {
 	background-position: center -1800px;
 }
 #menu-types .type-universal:hover, #menu-types LI.active .type-universal {
-	background-position: center -1950px;
+	background: url(../img/universal_calc_on.png) no-repeat center top;
 }
 .col-paper {
 	width: 184px;
@@ -306,7 +313,7 @@ span.paper-header a:active, span.paper-header a:visited {
 	right: 12px;
 	/*margin: 0 5px;*/
 }
-#paper-choose, #paper1-choose {
+#paper-choose, #paper1-choose, #category-preview {
 	width: 970px;
 	margin: 0 auto;
 	display: none;
@@ -618,7 +625,47 @@ A.amount-change:hover {
 	top: 22px;
 	right: 32px;
 	background: url(../img/banner-close.png) no-repeat left top;}
-	
+
+table.int-vertical {
+	clear: both;
+}
+
+table.int-vertical tr td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 2px;
+}
+
+div.categories {
+	margin: 0;
+	padding: 20px 0 0 0px;
+}
+
+A.categories {
+	margin: 0 10px 0 0;
+	padding: 0 9px 0 8px;
+	height: 35px;
+	line-height: 35px;
+	border-color: rgb(255,166,77);
+	border-width: 1px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	border-style: solid;
+	/*color: #FFA742;*/
+}
+
+.col-buttons {
+	clear: both;
+	float: left;
+	width: 700px;
+	border-right: 1px solid #DDD;
+}
+
+p.category-preview {
+	cursor: pointer;
+}
+
 /* Basic jQuery Slider essential styles */
 
 ul.bjqs{position:relative; list-style:none;padding:0;margin:0;overflow:hidden; display:none;}
