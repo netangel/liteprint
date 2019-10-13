@@ -1268,10 +1268,10 @@ var xProducts = {
     		value: "lite3v1",
     		lamination: 15,
     		items: [
-    			{name: "lite3v1", title: "Лайт 3 в 1", preview: "/img/calendars/lite3v1.png", lamination: 15},
-    			{name: "superlite", title: "Супер Лайт", preview: "/img/calendars/superlite.png", lamination: 15},
-    			{name: "litestandard", title: "Лайт Стандарт", preview: "/img/calendars/litestandard.png", lamination: 30},
-    			{name: "liteplus", title: "Лайт Плюс", preview: "/img/calendars/liteplus.png", lamination: 60},
+    			{name: "lite3v1", title: "Лайт 3 в 1", preview: "img/calendars/lite3v1.png", lamination: 15},
+    			{name: "superlite", title: "Супер Лайт", preview: "img/calendars/superlite.png", lamination: 15},
+    			{name: "litestandard", title: "Лайт Стандарт", preview: "img/calendars/litestandard.png", lamination: 30},
+    			{name: "liteplus", title: "Лайт Плюс", preview: "img/calendars/liteplus.png", lamination: 60},
     		]
     	},
 	    qty: {
