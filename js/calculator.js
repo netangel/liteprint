@@ -35,10 +35,11 @@ function xSetUI (sUi) {
 
 	//	Удаляем старые элементы
 	$("div.col-properties").html('');
-	$("#paper-choose, #paper1-choose").html('');
+	$("div.col-buttons").html('');
+	$("#paper-choose, #paper1-choose, #category-preview").html('');
 
 	//	Скроем элементы выбора бумаги
-	$("#product-paper, #product-paper1").hide();
+	$("#product-paper, #product-paper1, #product-category").hide();
 
 	//	Параметры продукта для калькулятора
 	for (var key in a) {
@@ -117,7 +118,6 @@ function xSetUI (sUi) {
 				    });
 				};
 			}
-			
 			$(container).appendTo('div.col-properties');
 		} else if (oRow.type == "int") {
 			//	Заголовок
@@ -171,23 +171,51 @@ function xSetUI (sUi) {
 			  .appendTo(amount_div);
 
 			$(amount_div).appendTo(container);
+			var vertical_presets = $("<table>").addClass(oRow.elemClass);
 
-			if (oRow.presets != null) {
-				for (var i = 0; i < oRow.presets.length; i++) {
-					$("<a>").attr({
+			var presets = oRow.presets;
+			if (presets != null && oRow.groupby != null) {
+				var groupByValue = a[oRow.groupby].value;
+				presets = presets[groupByValue];
+			}
+
+			if (presets != null) {
+				for (var i = 0; i < presets.length; i++) {
+					var value = presets[i] instanceof Object ? presets[i].a : presets[i];
+					var label = presets[i] instanceof Object ? presets[i].price : presets[i];
+					var item = $("<a>").attr({
 								href: 'javascript://',
 								key: key,
-								value: oRow.presets[i]
+								value: value
 							}).click(function() {
 								var key = $(this).attr('key');
 								$("#" + sUi + "_" + key).val( $(this).attr('value') ).change();
+								$(this).parents(".col-select").find("a.active").removeClass('active');
+								$(this).addClass('active');
 							}).addClass('amount-change')
-							.text(oRow.presets[i])
-							.appendTo(container);
-				} 
+							.text(value);
+					if (oRow.elemClass && oRow.elemClass == 'int-vertical') {
+						if (oRow.value == value) item.addClass('active');
+						var itemCol = $("<td>").css({width: '55px'}).append(item);
+						$("<tr>").addClass('rect')
+											.addClass('rect-l')
+											.append(itemCol)
+										 	.append("<td>" + label + "&nbsp;" + oRow.units + "</td>")
+										 	.appendTo(vertical_presets);
+					} else {
+						item.appendTo(container);
+					}
+				}
 			}
 
-			$(container).appendTo('div.col-properties');
+			// adding the regular int element
+			container.appendTo('div.col-properties');
+			if (oRow.elemClass && oRow.elemClass == 'int-vertical') {
+				//	adding the vertical presets as a new row
+				$("<div>").addClass('col-label').html("&nbsp;").appendTo('div.col-properties');
+				var s_container = container.clone();
+				s_container.html("").css('height', 'auto').append(vertical_presets).appendTo('div.col-properties');
+			}
 		} else if (oRow.type == "paper") {
 			var bValueSuitable = false;                           
 			
@@ -260,7 +288,59 @@ function xSetUI (sUi) {
 
 			$("#product-"+key).show();
 		}
-		
+		else if (oRow.type == "readonly") {
+			//	Заголовок
+			$("<div>").addClass('col-label')
+					.html('<span>'+oRow.name+'</span>')
+					.appendTo('div.col-properties');
+
+			//	Контейнер для значений
+			var container = $("<div>").addClass('col-label')
+																.css({
+																	clear: 'none',
+																	width: 'auto',
+																	'line-height': '37px',
+																	'margin-bottom': '15px',
+																	'font-weight': 'bold'
+																})
+																.append(oRow.title);
+
+			$(container).appendTo('div.col-properties');
+		}
+		else if (oRow.type == "cats") {
+			var container = $("<div>").addClass('col-select').addClass('rect').addClass('categories');
+			var selectedItem = null;
+			if (oRow.items != null) {
+				for (var i = 0; i < oRow.items.length; i++) {
+					item = oRow.items[i];
+					var button = $('<a>').attr({
+								href: 'javascript://',
+								key: key,
+								value: item.name,
+							}).click(function() {
+								xSetOption($(this).attr('key'), $(this).attr('value'), true);
+							}).addClass('amount-change')
+								.addClass('categories')
+							  .text(item.title);
+					if (oRow.value == item.name){
+						button.addClass('active');
+						selectedItem = item;
+					}
+					button.appendTo(container);
+				}
+			}
+
+			$('div.col-buttons').html(container);
+
+			if (selectedItem != null) {
+				// big calendar image for fancybox
+				$("<div>").html("<img src='" + selectedItem.preview + "'>").appendTo('#category-preview');
+				//	Preview
+				$("#product-category div.fancybox p.category-preview")
+					.html("<img src='" + selectedItem.preview + "' width='184px'>");
+				$("#product-category").show();
+			}
+		}
 	}
 
 	$("div.col-properties select, div.col-properties input").styler({
@@ -313,6 +393,10 @@ function xSetOption (key, value, renderInterface) {
 			//	Скролл к меню печатной продукции
 			$('html, body').animate({ scrollTop: $("#menu-types").offset().top - 37 }, 'fast');
 		};
+	}
+
+	if (renderInterface) {
+		xSetUI(sCurrentUI);
 	}
 
 	return true;
@@ -1165,6 +1249,153 @@ var xProducts = {
 				price:"price*xConst.markup"
 			}
 		}
+	},
+	calend_lite: {
+		name:   "Календари Лайт",
+		title:  "Календари Лайт",
+		//Формула, формирующая описание
+    desc:   "a.qty.value+ ' экз., печать ' + a.color.value + ', ' + xDecap(a.paper.title) + "
+    					+ "( (a.laminating.value!=0)? ((a.laminating.value==1)?'. <b class=\"red\">Односторонняя ламинация</b>':'. <b class=\"red\">Двусторонняя ламинация</b>'):'') + '. "
+    					+ "Пружина&nbsp;– ' + a.bind.title + ' люверс&nbsp;– ' + a.luvers.title + '. "
+    					+ "Срок исполнения&nbsp;– ' + ((x.time<1.1)?'сутки.':x.time+'&nbsp;р/дн.')  + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",
+    err:    "'Допустимые тиражи от '+a.qty.min+' до '+a.qty.max+' '+a.qty.units",
+    aClass: "type-calendar-lite",
+    // поля интерфейса и расчётов
+    ui: {
+    	category: {
+    		name: "Категория",
+    		type: "cats",
+    		value: "lite3v1",
+    		lamination: 15,
+    		items: [
+    			{name: "lite3v1", title: "Лайт 3 в 1", preview: "/img/calendars/lite3v1.png", lamination: 15},
+    			{name: "superlite", title: "Супер Лайт", preview: "/img/calendars/superlite.png", lamination: 15},
+    			{name: "litestandard", title: "Лайт Стандарт", preview: "/img/calendars/litestandard.png", lamination: 30},
+    			{name: "liteplus", title: "Лайт Плюс", preview: "/img/calendars/liteplus.png", lamination: 60},
+    		]
+    	},
+	    qty: {
+	    	name: "Тираж", 
+				type: "int", 
+				units: "&#8381;/экз.",
+				min: 1, 
+				max: 99999, 
+				increment: 10, 
+				value: 50,
+				groupby: "category",
+				presets: {
+					lite3v1: [
+						{a: 10,  price: 165},
+						{a: 50,  price: 125},
+						{a: 100, price: 100},
+						{a: 150, price: 95},
+						{a: 150, price: 90},
+						{a: 200, price: 85},
+						{a: 300, price: 80}
+					],
+					superlite: [
+						{a: 10,  price: 168},
+						{a: 50,  price: 130},
+						{a: 100, price: 125},
+						{a: 150, price: 115},
+						{a: 150, price: 108},
+						{a: 200, price: 105},
+						{a: 300, price: 100}
+					],
+					litestandard: [
+						{a: 10,  price: 210},
+						{a: 50,  price: 200},
+						{a: 100, price: 190},
+						{a: 150, price: 150},
+						{a: 150, price: 148},
+						{a: 200, price: 140},
+						{a: 300, price: 135}
+					],
+					liteplus: [
+						{a: 10,  price: 305},
+						{a: 50,  price: 234},
+						{a: 100, price: 237},
+						{a: 150, price: 223},
+						{a: 150, price: 220},
+						{a: 200, price: 215},
+						{a: 300, price: 200}
+					]
+				},
+				elemClass: "int-vertical",
+			},
+			color:  {
+				name: "Цветность", 
+				type: "formula", 
+				value: "4+0"
+			},
+			paper:  {
+				name: "Картон",
+				type: "readonly",
+				groups: "Картон",
+				value: "cbr300",
+				title: "Картон Crystal Board, 300г/м²",
+				sidesVar: "color",
+				price: "parseInt((a.qty.presets[a.category.value].filter(i => i.a <= a.qty.value).pop() || a.qty.presets[a.category.value][0]).price) * Math.ceil( parseFloat(a.size.value)) * (parseFloat(a.paper.overhead)+ Math.ceil( parseFloat(a.qty.value)) )",
+				qty: "Math.ceil( parseFloat(a.size.value)) * Math.ceil( parseFloat(a.qty.value)) ",
+				overhead: 0,
+				overheadFormula: "Math.ceil( parseFloat(a.paper.overhead))*Math.ceil( parseFloat(a.size.value))+((a.laminating.value==0)?0:a.laminating.value*4)"
+			},
+			size:  {
+				name: "Средние блоки",
+				type: "formula",
+				value: 1
+			},
+			laminating:  {
+				name: "Лами&shy;на&shy;ци&shy;я",  
+				type: "enum", 
+				value: 0,
+				title: "нет",
+				options:[
+					{title:"нет", v:"0"},
+					{title:"двусторонняя", v:"1"}
+				],
+				price:"Math.ceil(parseFloat(a.qty.value))*a.laminating.value*(a.category.items.filter(c=>c.name==a.category.value)[0].lamination||a.category.lamination)",
+				time:"(parseFloat(a.laminating.value)>0)?12:0",
+				elemClass: "jqselect"
+			},
+			luvers: {
+				name: "Люверс", 
+				type: "enum", 
+				value: 0,
+				title: "серебро",
+				options:[
+					{title: "серебро", v: 0},
+					{title: "золото", v: 1},
+				],
+				price: 0,
+				elemClass: "jqselect"
+			},
+			bind: {
+				name: "Пружина", 
+				type: "enum", 
+				value: 0,
+				title: "белая",
+				options:[
+					{title: "белая", v:"0"},
+					{title: "черная", v:"1"},
+					{title: "серебро", v:"2"}
+				],
+				price: 0,
+				elemClass: "jqselect"
+			},
+			delivery:{
+				name:"Доставка", 
+				type:"enum", 
+				value:0,
+				title:"без доставки",
+				options:[
+					{title:"без доставки", v:"0"},
+					{title:"Доставка по Архангельску", v:"1"}
+				],
+				price:"xConst.deliveryArkh * parseFloat(a.delivery.value)",
+				elemClass: "form-check"
+	   	}
+	  }
 	},
 	wireo: {
 		name:   "Продукция на пружине",
