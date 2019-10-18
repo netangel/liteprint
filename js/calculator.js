@@ -181,41 +181,36 @@ function xSetUI (sUi) {
 
 			if (presets != null) {
 				for (var i = 0; i < presets.length; i++) {
-					var value = presets[i] instanceof Object ? presets[i].a : presets[i];
-					var label = presets[i] instanceof Object ? presets[i].price : presets[i];
-					var item = $("<a>").attr({
+					const value = presets[i] instanceof Object ? presets[i].a : presets[i];
+					const label = presets[i] instanceof Object ? presets[i].price : presets[i];
+					const isHidden = presets[i] instanceof Object && presets[i].hidden != null && presets[i].hidden;
+
+					if (isHidden) continue;
+
+					const item = $("<a>").attr({
 								href: 'javascript://',
 								key: key,
-								value: value
+								value: value,
+								title:  label + "&nbsp;" + oRow.units
 							}).click(function() {
-								var key = $(this).attr('key');
+								const key = $(this).attr('key');
 								$("#" + sUi + "_" + key).val( $(this).attr('value') ).change();
 								$(this).parents(".col-select").find("a.active").removeClass('active');
 								$(this).addClass('active');
 							}).addClass('amount-change')
 							.text(value);
-					if (oRow.elemClass && oRow.elemClass == 'int-vertical') {
-						if (oRow.value == value) item.addClass('active');
-						var itemCol = $("<td>").css({width: '55px'}).append(item);
-						$("<tr>").addClass('rect')
-											.addClass('rect-l')
-											.append(itemCol)
-										 	.append("<td>" + label + "&nbsp;" + oRow.units + "</td>")
-										 	.appendTo(vertical_presets);
-					} else {
 						item.appendTo(container);
-					}
+					// }
 				}
 			}
 
 			// adding the regular int element
 			container.appendTo('div.col-properties');
-			if (oRow.elemClass && oRow.elemClass == 'int-vertical') {
-				//	adding the vertical presets as a new row
-				$("<div>").addClass('col-label').html("&nbsp;").appendTo('div.col-properties');
-				var s_container = container.clone();
-				s_container.html("").css('height', 'auto').append(vertical_presets).appendTo('div.col-properties');
-			}
+			$("a", container).tooltipster({
+					contentAsHTML: true,
+		      position: 'bottom',
+		      theme: 'tooltipster-shadow'
+		    });
 		} else if (oRow.type == "paper") {
 			var bValueSuitable = false;                           
 			
@@ -334,7 +329,7 @@ function xSetUI (sUi) {
 
 			if (selectedItem != null) {
 				// big calendar image for fancybox
-				$("<div>").html("<img src='" + selectedItem.preview + "'>").appendTo('#category-preview');
+				$("<div>").html("<img src='" + selectedItem.image + "' width='970px'>").appendTo('#category-preview');
 				//	Preview
 				$("#product-category div.fancybox p.category-preview")
 					.html("<img src='" + selectedItem.preview + "' width='184px'>");
@@ -1272,10 +1267,18 @@ var xProducts = {
     		value: "lite3v1",
     		lamination: 15,
     		items: [
-    			{name: "lite3v1", title: "Лайт 3 в 1", preview: "img/calendars/lite3v1.png", lamination: 15},
-    			{name: "superlite", title: "Супер Лайт", preview: "img/calendars/superlite.png", lamination: 15},
-    			{name: "litestandard", title: "Лайт Стандарт", preview: "img/calendars/litestandard.png", lamination: 30},
-    			{name: "liteplus", title: "Лайт Плюс", preview: "img/calendars/liteplus.png", lamination: 60},
+    			{name: "lite3v1", title: "Лайт 3 в 1", lamination: 15,
+    				preview: "img/preview/lite3v1.png",
+    				image: "img/calendars/lite_3v1.jpg"},
+    			{name: "superlite", title: "Супер Лайт", lamination: 15,
+    				preview: "img/preview/superlite.png",
+    				image: "img/calendars/super_lite.jpg" },
+    			{name: "litestandard", title: "Лайт Стандарт", lamination: 30,
+    				preview: "img/preview/litestandard.png",
+    				image: "img/calendars/lite_standard.jpg" },
+    			{name: "liteplus", title: "Лайт Плюс", lamination: 60,
+    				preview: "img/preview/liteplus.png",
+    				image: "img/calendars/lite_plus.jpg" },
     		]
     	},
 	    qty: {
@@ -1293,8 +1296,8 @@ var xProducts = {
 						{a: 50,  price: 125},
 						{a: 100, price: 100},
 						{a: 150, price: 95},
-						{a: 150, price: 90},
-						{a: 200, price: 85},
+						{a: 200, price: 90},
+						{a: 250, price: 85, hidden: true},
 						{a: 300, price: 80}
 					],
 					superlite: [
@@ -1302,8 +1305,8 @@ var xProducts = {
 						{a: 50,  price: 130},
 						{a: 100, price: 125},
 						{a: 150, price: 115},
-						{a: 150, price: 108},
-						{a: 200, price: 105},
+						{a: 200, price: 108},
+						{a: 250, price: 105, hidden: true},
 						{a: 300, price: 100}
 					],
 					litestandard: [
@@ -1311,8 +1314,8 @@ var xProducts = {
 						{a: 50,  price: 200},
 						{a: 100, price: 190},
 						{a: 150, price: 150},
-						{a: 150, price: 148},
-						{a: 200, price: 140},
+						{a: 200, price: 148},
+						{a: 250, price: 140, hidden: true},
 						{a: 300, price: 135}
 					],
 					liteplus: [
@@ -1320,8 +1323,8 @@ var xProducts = {
 						{a: 50,  price: 234},
 						{a: 100, price: 237},
 						{a: 150, price: 223},
-						{a: 150, price: 220},
-						{a: 200, price: 215},
+						{a: 200, price: 220},
+						{a: 250, price: 215, hidden: true},
 						{a: 300, price: 200}
 					]
 				},
@@ -1337,7 +1340,7 @@ var xProducts = {
 				type: "readonly",
 				groups: "Картон",
 				value: "cbr300",
-				title: "Картон Crystal Board, 300г/м²",
+				title: "Мелованный картон, 300г/м²",
 				sidesVar: "color",
 				price: "parseInt((a.qty.presets[a.category.value].filter(i => i.a <= a.qty.value).pop() || a.qty.presets[a.category.value][0]).price) * Math.ceil( parseFloat(a.size.value)) * (parseFloat(a.paper.overhead)+ Math.ceil( parseFloat(a.qty.value)) )",
 				qty: "Math.ceil( parseFloat(a.size.value)) * Math.ceil( parseFloat(a.qty.value)) ",
@@ -1843,7 +1846,7 @@ var xMedia = {
     pw225:      {name:"Синтетика PICOFILM 255 г/м3",         price:160.00,     sides:2, size:"430×310мм", group:"Бумага", comments: "Синтетическая полиэстровая плёнка. Устойчива к воде и химическим реагентам и идеальна для продукции, используемой на улице. Устойчива к кратковременному нагреву до 220°С"},
     yb200:   {name:"Синтетика Yapo Blue 158 г/м2",price:70.65,   sides:2, size:"450×320мм", group:"Картон", comments: "Синтетическая бумага. Не рвется, не промокает. Используется для изготовления продукции, требующей высокую износостойкость. * Рекомендуем для печати макетов в светлых тонах."},
     //Двустронний картон
-    cbr300:   {name:"Картон, 300г/м²",        price:7.5,     sides:2, size:"464×320мм", group:"Картон", comments: "300 гм/м мелованный картон. Самый распространненный картон для печати бюджетных визиток и открыток."},
+    cbr300:   {name:"Мелованный картон, 300г/м²",        price:7.5,     sides:2, size:"464×320мм", group:"Картон", comments: "300 гм/м мелованный картон. Самый распространненный картон для печати бюджетных визиток и открыток."},
 	spg300:   {name:"Картон Splendorgel, 300 г/м2",   price:39.7,    sides:2, size:"464×320мм", group:"Картон", comments: "Чистоцеллюлозный гладкий дизайнерский картон с шелковистой поверхностью. Extra White (белый). Изготовлен с использованием технологии бесхлорного отбеливания. Подходит для всех видов печати, ламинирования, переплётных работ."},
     // <!--  gco310:   {name:"Картон Crystal Board, 300г/м²",          price:4.56,     sides:2, size:"464×320мм", group:"Картон", comments: ""}, -->
     // <!--  cbr350:     {name:"Картон Crystal Board, 350г/м²",    price:4.34,     sides:2, size:"464×320мм", group:"Картон", comments: ""}, -->
@@ -1864,7 +1867,6 @@ var xMedia = {
 	vellum:   {name:"Antique Vellum Солома, 300г/м²", price:59,    sides:2, size:"464×320мм", group:"Картон", comments: "Дизайнерская бумага древесного цвета."},
     // <!-- endgold200:   {name:"Бумага ENDURO GOLD 75 г/м²",price:29.25,   sides:2, size:"464×320мм", group:"Картон", comments: ""}, -->
     // <!-- c0028824:   {name:"Картон Savile Row Tweed Camel, 300г/м²",price:20.35,   sides:2, size:"450×320мм", group:"Картон", comments: ""}, -->
-
 
     //Односторонний картон
     gsk160:   {name:"Калька, 110г/м²",price:45.0,   sides:1, size:"464×320мм", group:"Картон", comments: "Чистоцеллюлозная бумага высокой прозрачности - «калька». Белая."},
