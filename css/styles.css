@@ -34,7 +34,7 @@ B, STRONG {
 }
 P {
 	font: 15px/18px 'museo_sans_cyrl300', sans-serif;
-	margin: 0 0 18px 2px
+	margin: 0 0 18px 2px;
 }
 H1:first-child {
 	font: normal 32px/38px museo_sans_cyrl300;
@@ -62,16 +62,26 @@ H1 {
 	text-align: left;
 	margin: 0px auto
 }
+.wrap p {
+	text-align: justify;
+}
+.page-contacts p {
+	text-align:center;
+}
+.page-main p {
+	text-align:left;
+}
 #content .wrap {
 	padding-bottom: 86px;
 }
 /* Стили шапки */
 #top {
 	background: #F5F5F5;
-	z-index: 9999;
+	z-index: 949;
 	position: relative;
-	height: 153px;
+	height: 165px;
 	border-bottom: 1px solid #DDDDDD;
+	margin-bottom:15px;
 }
 #logo {
 	display: block;
@@ -111,14 +121,15 @@ H1 {
 	left: -6px;
 }
 #menu {
-	padding: 18px 0 0 186px;
+	padding: 18px 0 0 40px;
 	border-top: 1px solid #DDDDDD;
 	margin-top: 22px;
+	text-align:center;
 }
 #menu LI {
-	float: left;
+	display: inline;
 	font-size: 16px;
-	padding: 0 50px 0 4px;
+	padding: 0 40px 0 4px;
 }
 #menu LI.active {
 	font-family: 'museo_sans_cyrl500', sans-serif;
@@ -604,7 +615,7 @@ A.amount-change:hover {
 
 /* Banner */
 #banner-wrap {
-	width: 1024px;
+	width: 960px;
 	height: 210px;
 	margin: 0 auto;
 	position: relative;}
@@ -670,6 +681,7 @@ p.category-preview {
 
 ul.bjqs{position:relative; list-style:none;padding:0;margin:0;overflow:hidden; display:none;}
 li.bjqs-slide{position:absolute; display:block;}
+li.bjqs-slide a{color:#fff;}
 ul.bjqs-controls{list-style:none;margin:0;padding:0;z-index:9999;}
 ul.bjqs-controls.v-centered li a{position:absolute;
 display: block;
@@ -699,3 +711,22 @@ margin: 0 5px 0 6px
 ol.bjqs-markers li.active-marker a, ol.bjqs-markers li a:hover{
 	background-position: left top;}
 p.bjqs-caption{display:block;width:96%;margin:0;padding:2%;position:absolute;bottom:0;}
+
+.wrap table td{
+	padding:5px 0;
+}
+span.price{
+	font-family:'PT Sans', serif;
+}
+.cont_wrap{
+	min-height:100%;
+	margin-bottom:-86px;
+}
+
+tr.bg{
+	background-color:#f5f5f5;
+}
+.f_center{
+	float:left;
+	margin-left:340px;
+}
