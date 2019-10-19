@@ -48,7 +48,7 @@ function xSetUI (sUi) {
 		if (oRow.type == "enum") {
 			//	Заголовок
 			$("<div>").addClass('col-label')
-					.html( oRow.elemClass == 'form-check' ? '&nbsp;' : '<span>'+oRow.name+'</span>' )
+					.html( oRow.elemClass == 'form-check' ? ' ' : '<span>'+oRow.name+'</span>' )
 					.appendTo('div.col-properties');
 
 			//	Контейнер для значений
@@ -122,7 +122,7 @@ function xSetUI (sUi) {
 		} else if (oRow.type == "int") {
 			//	Заголовок
 			$("<div>").addClass('col-label')
-					.html( oRow.elemClass == 'form-check' ? '&nbsp;' : '<span>'+oRow.name+'</span>' )
+					.html( oRow.elemClass == 'form-check' ? ' ' : '<span>'+oRow.name+'</span>' )
 					.appendTo('div.col-properties');
 
 			//	Контейнер для значений
@@ -349,8 +349,9 @@ function xCalculate () {
 				}
 			}
 			if (oRow.price != null) {
-				var nPrice = parseInt(eval (oRow.price));
+				var nPrice = parseFloat(eval (oRow.price));
 				if (isNaN(nPrice) == false) {
+					nPrice = Math.round(nPrice);
 					oRowA.price = nPrice.toString();
 					price += nPrice;
 				}
@@ -376,20 +377,22 @@ function xCalculate () {
 			aa[key] = function(){};
 	}
 
-	x.price = xConst.priceRoundingBase*Math.ceil (price/xConst.priceRoundingBase);
-	x.price1 = Math.round ((x.price/a.qty.value)/0.01)/100
+	x.price = price.toFixed(0);
+	x.price1 = Math.round((x.price/a.qty.value)/0.01)/100
 	x.price20 = xConst.priceRoundingBase*Math.ceil (price*0.8/xConst.priceRoundingBase);
 
-	x.time = xConst.timeRoundingBase*Math.ceil ((time/24)/xConst.timeRoundingBase);
+	x.time = xConst.timeRoundingBase*Math.ceil((time/24)/xConst.timeRoundingBase);
+	x.time_string = (x.time < 1.1) ? 'сутки.' : Math.floor(x.time) + '-' + Math.ceil(x.time) + ' р/дн.';
+
 	
 	if (bCorrect) {
 		a.aa=$.extend(true,{},aa);
 		// if (this.wJSON) {$("#zText").html(wJSON.stringify(aa))};  
 		$("p.summary").html(eval(o.desc));   
 		$("p.price-full").html(x.price+"<small> </small><i>у</i>");
-		$("span.price-dogovor").html(x.price20+"<small> </small><i>у</i>");
+		// $("span.price-dogovor").html(x.price20+"<small> </small><i>у</i>");
 		$("p.price-one").html(x.price1+"<small> </small><i>у</i>/экз.");
-		// $("#xDetailedPrice").html('<div style="font-size:90%;position:absolute;left:0;top:3px;width:70px;color:#888;">Расклад по&nbsp;цене</div>'+html)
+		// $("#xDetailedPrice").html('<div style="font-size:90%;position:absolute;left:0;top:3px;width:70px;color:#888;">Расклад по цене</div>'+html)
 	 } else {
 		$("p.summary").html('<span style="color:red">'+eval(o.err)+'</span>');
 		$("p.price-full").html('');
@@ -471,7 +474,7 @@ var xProducts = {
 	sheet: {
 		name:   "Листовая продукция",
 		title:  "Листовая продукция", 
-		desc:   "a.qty.value+ ' экз. Формат '+a.size.title+', ' + a.color.title + ', ' + xDecap(a.paper.title)+ ( (a.laminating.value!=0)? ((a.laminating.value==1)?'. <b class=\"red\">Односторонняя ламинация</b>':'. <b class=\"red\">Двусторонняя ламинация</b>'):'') + ((a.rounding.value!=0)?'. Кругление '+a.rounding.title:'') + '. Срок исполнения&nbsp;– ' + ((x.time<1.1)?'сутки.':x.time+'&nbsp;р/дн.')  + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
+		desc:   "a.qty.value+ ' экз. Формат '+a.size.title+', ' + a.color.title + ', ' + xDecap(a.paper.title)+ ( (a.laminating.value!=0)? ((a.laminating.value==1)?'. <b class=\"red\">Односторонняя ламинация</b>':'. <b class=\"red\">Двусторонняя ламинация</b>'):'') + ((a.rounding.value!=0)?'. Кругление '+a.rounding.title:'') + '. Срок исполнения – ' + x.time_string + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
 		picUrl: "http://liteprint.me/i/calc/sheet1.jpg",             //URL картинки
 		aClass: "type-list",
 		err:    "'Допустимые тиражи от '+a.qty.min+' до '+a.qty.max+' '+a.qty.units",
@@ -484,7 +487,6 @@ var xProducts = {
 			printDelta:  {name:"Печать",
 				type:"formula",
 				price:"price*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/parseFloat(a.size.value)), 2.4, 0.70 ))"
-				// price:"price*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/parseFloat(a.size.value)), 4.3, 1.85 )-1)"
 			},
 			ops:    {name:"Обслуживание",
 					type:"formula",
@@ -544,7 +546,7 @@ var xProducts = {
 					type:"formula",
 					price:"xConst.paperMarkup * xMedia[a.paper.value].price * (parseFloat(a.paper.overhead)+Math.ceil(parseFloat(a.qty.value)/parseFloat(a.size.value)))"
 			},
-			laminating:  {name:"Лами&shy;на&shy;ци&shy;я",  
+			laminating:  {name:"Лами­на­ци­я",  
 					type:"enum", 
 					value:0,
 					title:"нет",
@@ -614,7 +616,7 @@ var xProducts = {
 	brochure: {
 		name:   "Многолистовое издание",
 		title:  "Многостраничные издания", 
-		desc:   "a.qty.value+ ' экз. Формат '+a.size.title+', объём '+a.pages.value+'&nbsp;стр. плюс обложки. Переплёт&nbsp;– '+a.bind.title+'.<br/><b>Обложка:</b> ' + a.color.title + ', ' + xDecap(a.paper.title) + ((a.laminating.value!=0)?((a.laminating.value==1)?', <b class=\"red\">односторонняя ламинация</b>':', <b class=\"red\">двусторонняя ламинация</b>'):'')+ '. <br /><b>Страницы: </b> '+ a.color1.title + ', ' + xDecap(a.paper1.title) + '. <br />Срок исполнения&nbsp;– ' + ((x.time<1.1)?'сутки.':x.time+'&nbsp;р/дн.') + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
+		desc:   "a.qty.value+ ' экз. Формат '+a.size.title+', объём '+a.pages.value+' стр. плюс обложки. Переплёт – '+a.bind.title+'.<br/><b>Обложка:</b> ' + a.color.title + ', ' + xDecap(a.paper.title) + ((a.laminating.value!=0)?((a.laminating.value==1)?', <b class=\"red\">односторонняя ламинация</b>':', <b class=\"red\">двусторонняя ламинация</b>'):'')+ '. <br /><b>Страницы: </b> '+ a.color1.title + ', ' + xDecap(a.paper1.title) + '. <br />Срок исполнения – ' + x.time_string + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
 		picUrl: "http://liteprint.me/i/calc/brochure.jpg",             //URL картинки
 		aClass: "type-multi",
 		err:    "'Допустимые тиражи от '+a.qty.min+' до '+a.qty.max+' '+a.qty.units+'",
@@ -631,7 +633,7 @@ var xProducts = {
 			},
 			printDelta:  {name:"Печать",
 				type:"formula",
-				price:"price*(xConst.float1000(Math.ceil(2*parseFloat(a.qty.value)/parseFloat(a.size.value)) + Math.ceil(parseFloat(a.qty.value)*parseFloat(a.pages.value)/(2*parseFloat(a.size.value))) + Math.ceil(parseFloat(a.paper1.overhead)*parseFloat(a.pages.value)/(2*parseFloat(a.size.value))), 2.4, 0.7 ))"
+				price:"price*(xConst.float1000(Math.ceil(2*parseFloat(a.qty.value)/parseFloat(a.size.value)) + Math.ceil(parseFloat(a.qty.value)*parseFloat(a.pages.value)/(2*parseFloat(a.size.value))) + Math.ceil(parseFloat(a.paper1.overhead)*parseFloat(a.pages.value)/(2*parseFloat(a.size.value))), 2.4, 0.70 ))"
 			},
 			ops:    {name:"Обслуживание",
 					type:"formula",
@@ -663,7 +665,7 @@ var xProducts = {
 			},            
 			pages:  {name:"Страниц", 
 					type:"int", 
-					units:"без&nbsp;обложек",
+					units:"без обложек",
 					min:2, 
 					max:512, 
 					increment:2, 
@@ -684,7 +686,7 @@ var xProducts = {
 					],
 					elemClass: "rect-l"
 			},
-			laminating:  {name:"Лами&shy;на&shy;ция обложки",  
+			laminating:  {name:"Лами­на­ция обложки",  
 					type:"enum", 
 					value:0,
 					title:"нет",
@@ -743,7 +745,9 @@ var xProducts = {
 					options:[
 						{title:"клей", v:"glue"},
 						{title:"скрепка", v:"stitch"},
-						{title:"пружина", v:"wireo"}
+						{title:"пружина", v:"wireo"},
+						{title:"2 болта", v:"2bolts"},
+						{title:"3 болта", v:"3bolts"}
 					],
 					price: "xConst.oneBindPrice[a.bind.value]*(parseFloat(a.paper.overhead)+parseFloat(a.qty.value))",
 					elemClass: "jqselect"
@@ -793,7 +797,7 @@ var xProducts = {
 	booklet: {
 		name:   "Буклет 2 сгиба",
 		title:  "Буклеты", 
-		desc:   "'Тираж ' + a.qty.value+ ' экз. Формат раскрытого '+a.size.title+', печать ' + a.color.title + ', материал&nbsp;– ' + xDecap(a.paper.title) + '. Срок исполнения&nbsp;– ' + ((x.time<1.1)?'сутки.':x.time+'&nbsp;р/дн.') + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
+		desc:   "'Тираж ' + a.qty.value+ ' экз. Формат раскрытого '+a.size.title+', печать ' + a.color.title + ', материал – ' + xDecap(a.paper.title) + '. Срок исполнения – ' + x.time_string + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
 		picUrl: "http://liteprint.me/i/calc/booklet.jpg",             //URL картинки
 		aClass: "type-buklet",
 		err:    "'Допустимые тиражи от '+a.qty.min+' до '+a.qty.max+' '+a.qty.units",
@@ -805,7 +809,7 @@ var xProducts = {
 			},
 			printDelta:  {name:"Печать",
 				type:"formula",
-				price:"price*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/parseFloat(a.size.value)), 2.4, 0.7))"
+				price:"price*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/parseFloat(a.size.value)), 2.4, 0.70 ))"
 			},
 			ops:    {name:"Обслуживание",
 					type:"formula",
@@ -828,7 +832,7 @@ var xProducts = {
 						{title:"А3", v:"1", desc:"Свёрнутый 14×30 см"},
 						{title:"А4", v:"2", desc:"Свёрнутый 10×21 см"},
 						{title:"А5", v:"4", desc:"Свёрнутый 7×15 см"},
-						{title:"42×14&nbsp;см", v:"2.0000000001", desc:"Свёрнутый 14×14 см"} //такой фокус с дробным числом надо делать, когда точное значение уже есть
+						{title:"42×14 см", v:"2.0000000001", desc:"Свёрнутый 14×14 см"} //такой фокус с дробным числом надо делать, когда точное значение уже есть
 					],
 					elemClass: "rect"
 			},
@@ -911,7 +915,7 @@ var xProducts = {
 	vis:{
 		name:   "Визитка",      //имя для заголовка расчёта
 		title:  "Визитки",      //имя для группы
-		desc:   "a.qty.value+ ' экз., ' + a.color.title + ', ' + xDecap(a.paper.title) +( (a.laminating.value!=0)? ((a.laminating.value==1)?'. <b class=\"red\">Односторонняя ламинация</b>':'. <b class=\"red\">Двусторонняя ламинация</b>'):'') + ((a.rounding.value!=0)?'. Кругление '+a.rounding.title:'') + '. Срок исполнения&nbsp;– ' + ((x.time<0.51)?'в тот же день.':x.time+'&nbsp;р/дн.') + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
+		desc:   "a.qty.value+ ' экз., ' + a.color.title + ', ' + xDecap(a.paper.title) +( (a.laminating.value!=0)? ((a.laminating.value==1)?'. <b class=\"red\">Односторонняя ламинация</b>':'. <b class=\"red\">Двусторонняя ламинация</b>'):'') + ((a.rounding.value!=0)?'. Кругление '+a.rounding.title:'') + '. Срок исполнения – ' + ((x.time<0.51)?'в тот же день.':x.time.toFixed(0)+' р/дн.') + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
 		picUrl: "http://liteprint.me/i/calc/vis.jpg",             //URL картинки
 		aClass: "type-card",
 		err:    "'Допустимые тиражи от '+a.qty.min+' до '+a.qty.max+' '+a.qty.units",
@@ -971,7 +975,7 @@ var xProducts = {
 					type:"formula",
 					price:"xConst.paperMarkup * xMedia[a.paper.value].price * (parseFloat(a.paper.overhead)+Math.ceil(parseFloat(a.qty.value)/24))"
 			},
-			laminating:  {name:"Лами&shy;на&shy;ци&shy;я",  
+			laminating:  {name:"Лами­на­ци­я",  
 				type:"enum", 
 				value:0,
 				title:"нет",
@@ -1041,7 +1045,7 @@ var xProducts = {
 	calend_q: {
 		name:   "Квартальный календарь",
 		title:  "Календари", 
-		desc:   "a.qty.value+ ' экз. Средние блоки '+a.size.title+', печать ' + a.color.value + ', ' + xDecap(a.paper.title)+ ( (a.laminating.value!=0)? ((a.laminating.value==1)?'. <b class=\"red\">Односторонняя ламинация</b>':'. <b class=\"red\">Двусторонняя ламинация</b>'):'') + '. Срок исполнения&nbsp;– ' + ((x.time<1.1)?'сутки.':x.time+'&nbsp;р/дн.')  + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
+		desc:   "a.qty.value+ ' экз. Средние блоки '+a.size.title+', печать ' + a.color.value + ', ' + xDecap(a.paper.title)+ ( (a.laminating.value!=0)? ((a.laminating.value==1)?'. <b class=\"red\">Односторонняя ламинация</b>':'. <b class=\"red\">Двусторонняя ламинация</b>'):'') + '. Срок исполнения – ' + x.time_string + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
 		picUrl: "http://ermouth.com/light/calend_q.jpg",             //URL картинки
 		aClass: "type-calendar",
 		err:    "'Допустимые тиражи от '+a.qty.min+' до '+a.qty.max+' '+a.qty.units",
@@ -1110,7 +1114,7 @@ var xProducts = {
 					type:"formula",
 					price:"xConst.paperMarkup * xMedia[a.paper.value].price * Math.ceil( parseFloat(a.size.value)) * (parseFloat(a.paper.overhead)+ Math.ceil( parseFloat(a.qty.value)) )"
 			},
-			laminating:  {name:"Лами&shy;на&shy;ци&shy;я",  
+			laminating:  {name:"Лами­на­ци­я",  
 					type:"enum", 
 					value:0,
 					title:"нет",
@@ -1168,8 +1172,8 @@ var xProducts = {
 	},
 	wireo: {
 		name:   "Продукция на пружине",
-		title:  "Продукция на&nbsp;пружине", 
-		desc:   "a.qty.value+ ' экз. Формат '+a.size.title+', объём '+a.pages.value+'&nbsp;листов плюс обложки. Пружинный переплёт.'+((a.riegel.value!=0)?' Ригель.':'')+'<br/><b>Обложки:</b> ' + a.color.title + ', ' + xDecap(a.paper.title) + ((a.laminating.value!=0)?((a.laminating.value==1)?', <b class=\"red\">односторонняя ламинация</b>':', <b class=\"red\">двусторонняя ламинация</b>'):'')+ '. <br /><b>Листы: </b> '+ a.color1.title + ', ' + xDecap(a.paper1.title) + ((a.laminating1.value!=0)?((a.laminating1.value==1)?', <b class=\"red\">односторонняя ламинация</b>':', <b class=\"red\">двусторонняя ламинация</b>'):'')+ '. <br />Срок исполнения&nbsp;– ' + ((x.time<1.1)?'сутки.':x.time+'&nbsp;р/дн.') + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
+		title:  "Продукция на пружине", 
+		desc:   "a.qty.value+ ' экз. Формат '+a.size.title+', объём '+a.pages.value+' листов плюс обложки. Пружинный переплёт.'+((a.riegel.value!=0)?' Ригель.':'')+'<br/><b>Обложки:</b> ' + a.color.title + ', ' + xDecap(a.paper.title) + ((a.laminating.value!=0)?((a.laminating.value==1)?', <b class=\"red\">односторонняя ламинация</b>':', <b class=\"red\">двусторонняя ламинация</b>'):'')+ '. <br /><b>Листы: </b> '+ a.color1.title + ', ' + xDecap(a.paper1.title) + ((a.laminating1.value!=0)?((a.laminating1.value==1)?', <b class=\"red\">односторонняя ламинация</b>':', <b class=\"red\">двусторонняя ламинация</b>'):'')+ '. <br />Срок исполнения – ' + x.time_string + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
 		picUrl: "http://ermouth.com/light/wireo.jpg",             //URL картинки
 		aClass: "type-spine",
 		err:    "'Допустимые тиражи от '+a.qty.min+' до '+a.qty.max+' '+a.qty.units+'",
@@ -1186,7 +1190,7 @@ var xProducts = {
 			},
 			printDelta:  {name:"Печать",
 				type:"formula",
-				price:"price*(xConst.float1000( Math.ceil((parseFloat(a.qty.value)*parseFloat(a.pages.value))/parseFloat(a.size.value)), 2.4, 0.7 ))"
+				price:"price*(xConst.float1000( Math.ceil((parseFloat(a.qty.value)*parseFloat(a.pages.value))/parseFloat(a.size.value)), 2.4, 0.70 ))"
 			},
 			ops:    {name:"Обслуживание",
 					type:"formula",
@@ -1219,7 +1223,7 @@ var xProducts = {
 			},            
 			pages:  {name:"Листов", 
 					type:"int", 
-					units:"без&nbsp;обложек",
+					units:"без обложек",
 					min:1, 
 					max:256, 
 					increment:1, 
@@ -1240,7 +1244,7 @@ var xProducts = {
 					],
 					elemClass: "rect-l"
 			},
-			laminating:  {name:"Лами&shy;на&shy;ция обложек",  
+			laminating:  {name:"Лами­на­ция обложек",  
 					type:"enum", 
 					value:0,
 					title:"нет",
@@ -1278,7 +1282,7 @@ var xProducts = {
 					],
 					elemClass: "rect-l"
 			},
-			laminating1:  {name:"Лами&shy;на&shy;ция листов",  
+			laminating1:  {name:"Лами­на­ция листов",  
 				type:"enum", 
 				value:0,
 				title:"нет",
@@ -1356,10 +1360,10 @@ var xProducts = {
 	general: {
 		name:   "Печатная продукция",
 		title:  "Универсальный расчёт", 
-		desc:   "a.qty.value+ ' экз. Формат ' + a.sizeX.value + '×' + a.sizeY.value + '&nbsp;мм (' + xPerSheet(a.bleed.value) + ' на листе), печать ' + a.color.title + ', ' + xDecap(a.paper.title) + '. '+((a.folds.value=='0')?'':'Сгибы&nbsp;– '+a.folds.value+' на экз. ')+((a.creasing.value=='0')?'':'Биговка&nbsp;– '+a.creasing.value+' на экз. ')+ ((a.glue.value=='0')?'':'Склейка&nbsp;– '+a.glue.value+'&nbsp;экз. ') + ((a.wireo.value=='0')?'':'Переплёт на пружину&nbsp;– '+a.wireo.value+'&nbsp;экз. ') + ((a.laminating.value!=0)?((a.laminating.value==1)?' <b class=\"red\">Односторонняя ламинация.</b>':' <b class=\"red\">Двусторонняя ламинация.</b>'):'')+((a.rounding.value!=0)?' Кругление '+a.rounding.title+'.':'')+'<br />Срок исполнения&nbsp;– ' + ((x.time<1.1)?'сутки.':x.time+'&nbsp;р/дн.') + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
+		desc:   "a.qty.value+ ' экз. Формат ' + a.sizeX.value + '×' + a.sizeY.value + ' мм (' + xPerSheet(a.bleed.value) + ' на листе), печать ' + a.color.title + ', ' + xDecap(a.paper.title) + '. '+((a.folds.value=='0')?'':'Сгибы – '+a.folds.value+' на экз. ')+((a.creasing.value=='0')?'':'Биговка – '+a.creasing.value+' на экз. ')+ ((a.glue.value=='0')?'':'Склейка – '+a.glue.value+' экз. ') + ((a.wireo.value=='0')?'':'Переплёт на пружину – '+a.wireo.value+' ') + ((a.bolts.value=='0')?'':'Переплёт на болты – '+a.bolts.value+' '+a.bolts.units+' ') + ((a.laminating.value!=0)?((a.laminating.value==1)?' <b class=\"red\">Односторонняя ламинация.</b>':' <b class=\"red\">Двусторонняя ламинация.</b>'):'')+((a.rounding.value!=0)?' Кругление '+a.rounding.title+'.':'')+'<br />Срок исполнения – ' + x.time_string + ((a.delivery.value!=0)?' Доставка '+a.delivery.title+'.':'')",      //Формула, формирующая описание
 		picUrl: "http://liteprint.me/i/calc/general.gif",             //URL картинки
 		aClass: "type-universal",
-		err:    "'Допустимые тиражи от '+a.qty.min+' до '+a.qty.max+' '+a.qty.units+' Максимальный размер '+a.sizeX.max+'×'+a.sizeY.max+'&nbsp;мм, минимальный –&nbsp;'+a.sizeX.min+'×'+a.sizeY.min+'&nbsp;мм.'",
+		err:    "'Допустимые тиражи от '+a.qty.min+' до '+a.qty.max+' '+a.qty.units+' Максимальный размер '+a.sizeX.max+'×'+a.sizeY.max+' мм, минимальный – '+a.sizeX.min+'×'+a.sizeY.min+' мм.'",
 		ui:{                    //поля интерфейса и расчётов
 			print:  {name:"Индиго",
 					type:"formula",
@@ -1368,7 +1372,7 @@ var xProducts = {
 			},
 			printDelta:  {name:"Печать",
 				type:"formula",
-				price:"price*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/xPerSheet(a.bleed.value)), 2.4, 0.7 ))"
+				price:"price*(xConst.float1000( Math.ceil(parseFloat(a.qty.value)/xPerSheet(a.bleed.value)), 2.4, 0.70 ))"
 			},
 			ops:    {name:"Обслуживание",
 					type:"formula",
@@ -1442,7 +1446,7 @@ var xProducts = {
 					type:"formula",
 					price:"xConst.paperMarkup * xMedia[a.paper.value].price * (parseFloat(a.paper.overhead)+Math.ceil(parseFloat(a.qty.value)/xPerSheet(a.bleed.value)))"
 			},
-			laminating:  {name:"Лами&shy;на&shy;ция",  
+			laminating:  {name:"Лами­на­ция",  
 					type:"enum", 
 					value:0,
 					title:"нет",
@@ -1522,7 +1526,7 @@ var xProducts = {
 				price:"parseFloat(a.wireo.value)* xConst.oneBindPrice['wireo']",
 				time:"(parseFloat(a.wireo.value)>0)?24:0"
 			},
-			personalisation:   {name:"Персо&shy;на&shy;ли&shy;зация", 
+			personalisation:   {name:"Персо­на­ли­зация", 
 				type:"int", 
 				units:"экз.",
 				min:0, 
@@ -1532,6 +1536,17 @@ var xProducts = {
 				price:"parseFloat(a.personalisation.value)* xConst.onePersonalisationPrice",
 				time:"(parseFloat(a.personalisation.value)>0)?6:0"
 			},
+			bolts: {
+                name: "Болты", 
+                type: "int", 
+                units: "шт.",
+                min:0, 
+                max:99999, 
+                increment:1, 
+                value:0,
+                price:"parseFloat(a.bolts.value)* xConst.oneBindPrice['bolt']",
+                time:"(parseFloat(a.bolts.value)>0)?24:0"
+            },
 			design:    {name:"Дизайн", 
 				type:"int", 
 				units:"р.",
@@ -1576,99 +1591,103 @@ var xProducts = {
 
 //	Бумага
 var xMedia = {
-	of80:      {name:"Офсетная бумага, 80г/м²",           price:1.82,     sides:2, size:"440×310мм", group:"Бумага", comments: ""},
-    of100:      {name:"Офсетная бумага, 100г/м²",           price:2.00,     sides:2, size:"440×310мм", group:"Бумага"},
-    <!-- sc120:      {name:"Матовая меловка, 120г/м²",           price:1.30,     sides:2, size:"440×310мм", group:"Бумага"}, -->
-    <!-- gc120:      {name:"Глянцевая меловка, 120г/м²",         price:1.85,     sides:2, size:"440×310мм", group:"Бумага"}, -->
-    sc140:      {name:"Матовая меловка, 130г/м²",           price:1.72,     sides:2, size:"440×310мм", group:"Бумага"},
-    <!-- gc140:      {name:"Глянцевая меловка, 140г/м²",         price:1.74,     sides:2, size:"440×310мм", group:"Бумага"},  -->
-    <!-- sc157:      {name:"Матовая меловка, 160г/м²",          price:2.20,     sides:2, size:"440×310мм", group:"Бумага"}, -->
-    gc157:      {name:"Глянцевая меловка, 150г/м²",         price:1.90,     sides:2, size:"440×310мм", group:"Бумага"},
-    sc250:      {name:"Матовая меловка, 200г/м²",           price:4.50,     sides:2, size:"440×310мм", group:"Бумага"},
-    gc250:      {name:"Глянцевая меловка, 200г/м²",         price:4.50,     sides:2, size:"440×310мм", group:"Бумага"},
-    sc300:      {name:"Глянцевая меловка, 300г/м²",         price:5.90,     sides:2, size:"440×310мм", group:"Бумага"},
-    mt300:      {name:"Матовая меловка, 300г/м²",         price:5.90,     sides:2, size:"440×310мм", group:"Бумага"},
-    w70705:      {name:"Фотобумага, E-Photo 190г/м²",         price:16.00,     sides:2, size:"440×310мм", group:"Бумага"},
-    w70706:      {name:"Фотобумага, E-Photo 260г/м²",         price:18.00,     sides:2, size:"440×310мм", group:"Бумага"},
-    pw225:      {name:"Синтетика PICOFILM 255 г/м3",         price:140.00,     sides:2, size:"430×310мм", group:"Бумага"},
-    np:      {name:"Без бумаги",         price:0.00,     sides:2, size:"430×310мм", group:"Бумага"},
-
+	np:      {name:"Без бумаги",         price:0.00,     sides:2, size:"430×310мм", group:"Бумага", comments: "Бывают ситуации, когда нужно посчитать только печать, а бумагу Вы приносите свою. Мы не одобряем такие ситуации, но всякое бывает."},
+	of80:      {name:"Офсетная бумага, 80г/м²",           price:2.10,     sides:2, size:"440×310мм", group:"Бумага", comments: "Простая офисная бумага, такая же как в Вашем принтере. Только мы на ней печатаем лучше чем Ваш принтер ;)."},
+    of100:      {name:"Офсетная бумага, 100г/м²",           price:4.77,     sides:2, size:"440×310мм", group:"Бумага", comments: "Офсетная бумага 100 г/м. Более плотная чем та, что в Вашем принтере, но с такой же фактурой."},
+    sc120:      {name:"Матовая меловка, 115г/м²",           price:2.05,     sides:2, size:"440×310мм", group:"Бумага", comments: "Тонкая матовая двусторонняя мелованная бумага. Идеально подходит для большинства печатных работ."},
+    <!-- gc120:      {name:"Глянцевая меловка, 120г/м²",         price:1.94,     sides:2, size:"440×310мм", group:"Бумага", comments: ""}, -->
+    sc140:      {name:"Матовая меловка, 130г/м²",           price:2.50,     sides:2, size:"440×310мм", group:"Бумага", comments: "Тонкая матовая двусторонняя мелованная бумага. Идеально подходит для большинства печатных работ. Наиболее востребована для печати страниц различных буклетов и книг."},
+    <!-- gc140:      {name:"Глянцевая меловка, 140г/м²",         price:1.74,     sides:2, size:"440×310мм", group:"Бумага", comments: ""},  -->
+    <!-- sc157:      {name:"Матовая меловка, 160г/м²",          price:2.20,     sides:2, size:"440×310мм", group:"Бумага", comments: ""}, -->
+    gc157:      {name:"Глянцевая меловка, 150г/м²",         price:2.50,     sides:2, size:"440×310мм", group:"Бумага", comments: "Глянцевая двусторонняя мелованная бумага. Идеально подходит для большинства печатных работ. Наиболее подходит для печати листовок и плакатов."},
+	krft90:      {name:"Крафт-бумага, 90г/м²",         price:3.50,     sides:2, size:"440×310мм", group:"Бумага", comments: "Крафт-бумага, 90 г/м² (пр-во Германия) имеет цвет натурального древесного волокна, отличается экологичностью и имеет прекрасные прочностные характеристики."},
+	sc250:      {name:"Матовая меловка, 200г/м²",           price:5.10,     sides:2, size:"440×310мм", group:"Бумага", comments: "Матовая мелованная бумага 200 гм/м. Требуется для печати продукции где необходима более толстая бумага, такие как недорогие приглашения, страницы перекидных календарей."},
+    gc250:      {name:"Глянцевая меловка, 200г/м²",         price:5.10,     sides:2, size:"440×310мм", group:"Бумага", comments: "Глянцевая мелованная бумага 200 гм/м. Требуется для печати продукции где необходима более толстая бумага, такие как недорогие приглашения, страницы перекидных календарей."},
+    sc300:      {name:"Глянцевая меловка, 300г/м²",         price:6.30,     sides:2, size:"440×310мм", group:"Бумага", comments: "Глянцевая мелованная бумага 300 гм/м. Требуется для печати продукции где необходима более толстая бумага, такие как обложки книг на переплете, приглашения, страницы перекидных календарей."},
+    mt300:      {name:"Матовая меловка, 300г/м²",         price:6.30,     sides:2, size:"440×310мм", group:"Бумага", comments: "Матовая мелованная бумага 300 гм/м. Требуется для печати продукции где необходима более толстая бумага, такие как обложки книг на переплете, приглашения, страницы перекидных календарей."},
+    w70705:      {name:"Фотобумага, E-Photo 190г/м²",         price:30.00,     sides:2, size:"440×310мм", group:"Бумага", comments: "190 гм/м. Бумага для печати цифровых фотоальбомов реалистичного разрешения. Воспроизведение реальной фотопечати. Небликующая поверхность, устойчива к влажности, стиранию и грязи."},
+    w70706:      {name:"Фотобумага, E-Photo 260г/м²",         price:35.00,     sides:2, size:"440×310мм", group:"Бумага", comments: "260 гм/м. Бумага для печати цифровых фотоальбомов реалистичного разрешения. Воспроизведение реальной фотопечати. Небликующая поверхность, устойчива к влажности, стиранию и грязи."},
+    w70707:      {name:"Фотобумага, E-Photo Metallic 210г/м²",         price:60.00,     sides:2, size:"440×310мм", group:"Бумага", comments: "210 гм/м. Бумага для печати цифровых фотоальбомов реалистичного разрешения. Воспроизведение реальной фотопечати. Небликующая поверхность, устойчива к влажности, стиранию и грязи."},
+	w70708:      {name:"Фотобумага, E-Photo Matt 190г/м²",         price:35.00,     sides:2, size:"440×310мм", group:"Бумага", comments: "190 гм/м. Бумага для печати цифровых фотоальбомов реалистичного разрешения. Воспроизведение реальной фотопечати. Небликующая поверхность, устойчива к влажности, стиранию и грязи."},
+    pw225:      {name:"Синтетика PICOFILM 255 г/м3",         price:160.00,     sides:2, size:"430×310мм", group:"Бумага", comments: "Синтетическая полиэстровая плёнка. Устойчива к воде и химическим реагентам и идеальна для продукции, используемой на улице. Устойчива к кратковременному нагреву до 220°С"},
+    yb200:   {name:"Синтетика Yapo Blue 158 г/м2",price:70.65,   sides:2, size:"450×320мм", group:"Картон", comments: "Синтетическая бумага. Не рвется, не промокает. Используется для изготовления продукции, требующей высокую износостойкость. * Рекомендуем для печати макетов в светлых тонах."},
     //Двустронний картон
-    <!--  gco310:   {name:"Картон Crystal Board, 300г/м²",          price:4.56,     sides:2, size:"464×320мм", group:"Картон"}, -->
-    <!--  cbr350:     {name:"Картон Crystal Board, 350г/м²",    price:4.34,     sides:2, size:"464×320мм", group:"Картон"}, -->
-    c0001580:   {name:"Картон Splendorlux, 250г/м²",   price:28.00,    sides:2, size:"464×320мм", group:"Картон"},
-    <!-- c0001507:   {name:"Картон Symbol Freelife, 300г/м²",   price:14.9,    sides:2, size:"464×320мм", group:"Картон"}, -->
-    c0001418:   {name:"Картон Tintoretto Gesso, 250г/м²",   price:32.5,    sides:2, size:"464×320мм", group:"Картон"},
-    c0001551:   {name:"Картон Nettuno BCO Art, 280г/м²",    price:34.0,    sides:2, size:"464×320мм", group:"Картон"},
-    c0001325:   {name:"Constellation Snow Tella, 280г/м²",    price:34.5,    sides:2, size:"464×320мм", group:"Картон"},
-    c0001334:   {name:"Картон Aquarello Avorio, 280г/м²",   price:32.5,    sides:2, size:"464×320мм", group:"Картон"},
-    <!--c0001335:   {name:"Картон Aquarello Avorio, 160г/м²",   price:12.6,    sides:2, size:"464×320мм", group:"Картон"},-->
-    c0001319:   {name:"Картон Marina Conciglione, 240г/м²", price:29.50,    sides:2, size:"464×320мм", group:"Картон"},
-    c0001572:   {name:"Картон Sirio Pearl Oyster Shell, 300г/м²", price:60.5,    sides:2, size:"464×320мм", group:"Картон"},
-    c0001575:   {name:"Картон Sirio Pearl Oyster Shell, 125г/м²", price:22.5,    sides:2, size:"464×320мм", group:"Картон"},
-    <!--   cbr270:   {name:"Картон Crystal Board, 270г/м²",         price:3.28,     sides:2, size:"464×320мм", group:"Картон"},  -->
-    cbr300:   {name:"Картон 2 стороны, 300г/м²",        price:7.5,     sides:2, size:"464×320мм", group:"Картон"},
-    c10001563:   {name:"Картон Woodstock Betulla, 300г/м²", price:35.5,    sides:2, size:"464×320мм", group:"Картон"},
-    c0001573:   {name:"Картон Sirio Pearl Polar Down, 300г/м²", price:60.5,    sides:2, size:"464×320мм", group:"Картон"},
-    c0001574:   {name:"Картон Sirio Pearl Polar Down, 125г/м²", price:22.5,    sides:2, size:"464×320мм", group:"Картон"},
-    c0001570:   {name:"Картон Sirio Pearl Aurium, 300г/м²",   price:70.5,    sides:2, size:"464×320мм", group:"Картон"},
-    c0001571:   {name:"Картон Sirio Pearl Platinum, 300г/м²",price:70.5,   sides:2, size:"464×320мм", group:"Картон"},
-    <!-- yb200:   {name:"Синтетика Yapo Blue 200 г/м2",price:20.65,   sides:2, size:"450×320мм", group:"Картон"}, -->
-    <!-- endgold200:   {name:"Бумага ENDURO GOLD 75 г/м²",price:29.25,   sides:2, size:"464×320мм", group:"Картон"}, -->
-    spg300:   {name:"Картон Splendorgel, 300 г/м2",   price:30.5,    sides:2, size:"464×320мм", group:"Картон"},
-    <!-- c0028824:   {name:"Картон Savile Row Tweed Camel, 300г/м²",price:20.35,   sides:2, size:"450×320мм", group:"Картон"}, -->
+    cbr300:   {name:"Картон, 300г/м²",        price:7.5,     sides:2, size:"464×320мм", group:"Картон", comments: "300 гм/м мелованный картон. Самый распространненный картон для печати бюджетных визиток и открыток."},
+	spg300:   {name:"Картон Splendorgel, 300 г/м2",   price:39.7,    sides:2, size:"464×320мм", group:"Картон", comments: "Чистоцеллюлозный гладкий дизайнерский картон с шелковистой поверхностью. Extra White (белый). Изготовлен с использованием технологии бесхлорного отбеливания. Подходит для всех видов печати, ламинирования, переплётных работ."},
+    <!--  gco310:   {name:"Картон Crystal Board, 300г/м²",          price:4.56,     sides:2, size:"464×320мм", group:"Картон", comments: ""}, -->
+    <!--  cbr350:     {name:"Картон Crystal Board, 350г/м²",    price:4.34,     sides:2, size:"464×320мм", group:"Картон", comments: ""}, -->
+    c0001580:   {name:"Картон Splendorlux, 250г/м²",   price:35.5,    sides:2, size:"464×320мм", group:"Картон", comments: "Чистоцеллюлозный картон с белым высокоглянцевым покрытием лицевой стороны.  Оборот - белый без покрытия. Подходит для печати визиток если нужна повышенная глянцевая сторона."},
+    <!-- c0001507:   {name:"Картон Symbol Freelife, 300г/м²",   price:14.9,    sides:2, size:"464×320мм", group:"Картон", comments: ""}, -->
+    c0001418:   {name:"Картон Tintoretto Gesso, 250г/м²",   price:37.5,    sides:2, size:"464×320мм", group:"Картон", comments: "Дизайнерский картон. Идеально подходит для любой высококачественной полиграфической продукции от бланков до элитной упаковки."},
+    c0001551:   {name:"Картон Nettuno BCO Art, 280г/м²",    price:45.1,    sides:2, size:"464×320мм", group:"Картон", comments: "Чистоцеллюлозная дизайнерская бумага с двухсторонней текстурой микровельвет. Цвет - белый."},
+    c0001325:   {name:"Constellation Snow Tella, 280г/м²",    price:42.5,    sides:2, size:"464×320мм", group:"Картон", comments: "Картон с тиснением под Лён. Наиболее популярный картон для изготовления представительских визиток."},
+    c0001334:   {name:"Картон Aquarello Avorio, 280г/м²",   price:45.78,    sides:2, size:"464×320мм", group:"Картон", comments: "Чистоцеллюлозная тонированная в массе бумага без покрытия. Имеет с обеих сторон текстуру микровельвет. Цвет - Avorio (слоновая кость)."},
+    <!--c0001335:   {name:"Картон Aquarello Avorio, 160г/м²",   price:12.6,    sides:2, size:"464×320мм", group:"Картон", comments: ""},-->
+    c0001319:   {name:"Картон Marina Conciglione, 240г/м²", price:45.50,    sides:2, size:"464×320мм", group:"Картон", comments: "Чистоцеллюлозная бумага двухцветной тонировки, имитирующая пергамент."},
+    c0001572:   {name:"Картон Sirio Pearl Oyster Shell, 300г/м²", price:75.5,    sides:2, size:"464×320мм", group:"Картон", comments: "Чистоцеллюлозный тонированный картон со специальным перламутровым покрытием и односторонним тиснением. Тонирование под цвет жемчуга."},
+    <!--   cbr270:   {name:"Картон Crystal Board, 270г/м²",         price:3.28,     sides:2, size:"464×320мм", group:"Картон", comments: ""},  -->
+    c0001573:   {name:"Картон Sirio Pearl Polar Down, 300г/м²", price:79.5,    sides:2, size:"464×320мм", group:"Картон", comments: "Чистоцеллюлозный тонированный картон со специальным перламутровым покрытием и односторонним тиснением. Белый."},
+    c0001570:   {name:"Картон Sirio Pearl Aurium, 300г/м²",   price:87.5,    sides:2, size:"464×320мм", group:"Картон", comments: "Чистоцеллюлозный тонированный картон со специальным перламутровым покрытием и односторонним тиснением. Тонирование под золото."},
+    c0001571:   {name:"Картон Sirio Pearl Platinum, 300г/м²",price:87.5,   sides:2, size:"464×320мм", group:"Картон", comments: "Чистоцеллюлозный тонированный картон со специальным перламутровым покрытием и односторонним тиснением. Тонирование под серебро."},
+    c10001563:   {name:"Картон Woodstock Betulla, 300г/м²", price:45.5,    sides:2, size:"464×320мм", group:"Картон", comments: "Гладкая дизайнерская бумага с содержанием вторичных волокон древесного цвета. Самые смелые графические решения позволят изготовить из этой бумаги необыкновенную, стильную художественную продукцию"},
+	vellum:   {name:"Antique Vellum Солома, 300г/м²", price:59,    sides:2, size:"464×320мм", group:"Картон", comments: "Дизайнерская бумага древесного цвета."},
+    <!-- endgold200:   {name:"Бумага ENDURO GOLD 75 г/м²",price:29.25,   sides:2, size:"464×320мм", group:"Картон", comments: ""}, -->
+    <!-- c0028824:   {name:"Картон Savile Row Tweed Camel, 300г/м²",price:20.35,   sides:2, size:"450×320мм", group:"Картон", comments: ""}, -->
 
 
     //Односторонний картон
-    gsk160:   {name:"Калька GSK ExtraWhite, 110г/м²",price:20.0,   sides:1, size:"464×320мм", group:"Картон"},
-    <!-- glama150:   {name:"Калька Glama Digit, 150г/м²",price:25.50,   sides:1, size:"464×320мм", group:"Картон"},-->
-    <!--   cpa270:   {name:"Картон Crystal Pack, 270г/м²",   price:2.99,    sides:1, size:"464×320мм", group:"Картон"}, -->
-    <!-- cpa295:   {name:"Картон 1 сторона, 300г/м²",   price:4.76,    sides:1, size:"464×320мм", group:"Картон"},-->
-    <!-- pt135:      {name:"Синтетика прозр Picofilm 225 г/м3",         price:100.00,     sides:2, size:"430×310мм", group:"Бумага"},-->
+    gsk160:   {name:"Калька, 110г/м²",price:45.0,   sides:1, size:"464×320мм", group:"Картон", comments: "Чистоцеллюлозная бумага высокой прозрачности - «калька». Белая."},
+    <!-- glama150:   {name:"Калька Glama Digit, 150г/м²",price:25.50,   sides:1, size:"464×320мм", group:"Картон", comments: ""},-->
+    <!--   cpa270:   {name:"Картон Crystal Pack, 270г/м²",   price:2.99,    sides:1, size:"464×320мм", group:"Картон", comments: ""}, -->
+    <!-- cpa295:   {name:"Картон 1 сторона, 300г/м²",   price:4.76,    sides:1, size:"464×320мм", group:"Картон", comments: ""},-->
+    <!-- pt135:      {name:"Синтетика прозр Picofilm 225 г/м3",         price:100.00,     sides:2, size:"430×310мм", group:"Бумага", comments: ""},-->
 
     //Самоклейка
 
-    adest2:   {name:"Самоклейка Adestor Gloss Perm., 195г/м²",price:13.5,         sides:1, size:"464×320мм", group:"Самоклейка"},
-    yupotako:   {name:"Yupo Tako синтетика лип, 170г/м²",price:130,         sides:1, size:"460×320мм", group:"Самоклейка"},
+    adest2:   {name:"Самоклейка Adestor Gloss Perm., 195г/м²",price:19.5,         sides:1, size:"464×320мм", group:"Самоклейка", comments: "Мелованная бумага с самоклеющейся обратной стороной. Для изготовления различных наклеек. "},
+    yupotako:   {name:"Yupo Tako синтетика липучая, 170г/м²",price:250,         sides:1, size:"460×320мм", group:"Самоклейка", comments: "Уникальная синтетическая бумага, прилипающая к гладким поверхностям. Полипропиленовая синтетическая бумага c микроприсосками на оборотной стороне. «Клеится без клея» к любым гладким поверхностям без образования пузырей. Может «переклеиваться» неограниченное количество раз, не оставляет следов. Можно мыть и сушить."},
+	raf01:   {name:"Самоклейка Raflatac, белая синтетическая, 75г/м²",price:75,         sides:1, size:"460×320мм", group:"Самоклейка", comments: "Синтетический самоклеящийся материал белого цвета"},
+	raf02:   {name:"Самоклейка Raflatac, серебристая синтетическая, 80г/м²",price:75,         sides:1, size:"460×320мм", group:"Самоклейка", comments: "Синтетический самоклеящийся материал серебристого цвета"},
 
     //Тёмный картон
-    <!--   c10022460:{name:"Картон Sirio Black, 290г/м²",price:13.87,   sides:2, size:"464×320мм", group:"ТёмныйКартон"} -->
+    <!--   c10022460:{name:"Картон Sirio Black, 290г/м²",price:13.87,   sides:2, size:"464×320мм", group:"ТёмныйКартон", comments: ""} -->
 }
 
-var xConst = {
-    basePrice: 1.55,
-    deliveryArkh: 100,
-    paperMarkup: 0.3,
-    oneCut: 1.2,
-    priceRoundingBase: 1,
-    timeRoundingBase: 0.5,
-    oneFoldPrice: 0.2,
-    oneSideLaminationPrice: 5,
-    oneCreasingPrice: 0.6,
-    maxX: 437,
-    maxY: 308,
-    oneCalendarAssembly: 10,
-    oneTearOffQuarter: 20,
-    oneQuarterCalendCompo: 6.6,
-    oneWireOPrice: 1.6,
-    oneRoundingPrice: 0.15,
-    oneBindPrice: {
-        glue: 20,
-        stitch: 5,
-        wireo: 15
-    },
-    oneRiegelPrice: 10,
-    onePersonalisationPrice: 1,
-    oneOpaquePrice: 2.5,
-    markup: 0.18,
-    float1000:function (qty0,highK,lowK) {
-		var qty = parseInt(qty0);
-		if (highK==lowK || isNaN(qty) || qty<1) return highK;
-		if (qty >= 1000) return lowK-0.5;
-		var k = 0.70383349 + 2.26120533*(Math.pow(qty/500+1,-16.5383228));//*(highK-lowK) + lowK;
-		if (k>highK) k=highK;
-		if (k<lowK) k=lowK;
-		return k;
-	}
-};
 
+var xConst = {
+        basePrice:      1.6,    
+        deliveryArkh:   150,    
+        paperMarkup:    0.5,    
+        oneCut:         1.8,      
+        priceRoundingBase: 1.5,   
+        timeRoundingBase:0.7,   
+        oneFoldPrice: 0.5,      
+        oneSideLaminationPrice:10,
+        oneCreasingPrice: 0.8,    
+        maxX:437,
+        maxY:308,
+        oneCalendarAssembly:20,
+        oneTearOffQuarter:30,
+        oneQuarterCalendCompo:8.6,
+        oneWireOPrice:2,
+        oneRoundingPrice:0.20,
+        oneBindPrice:{
+                    glue:30,
+                    stitch:7,
+                    wireo:20,
+					'2bolts': 40,
+                    '3bolts': 60
+        },
+        oneRiegelPrice:10,
+        onePersonalisationPrice:1,
+        oneOpaquePrice:2.5,
+        markup:0.18,
+        float1000:function (qty0,highK,lowK) {
+			var qty = parseInt(qty0);
+			if (highK==lowK || isNaN(qty) || qty<1) return highK;
+			var k = 0.70383349 + 2.26120533*(Math.pow(qty/500+1,-16.5383228));//*(highK-lowK) + lowK;
+			if (k>highK) k=highK;
+			if (k<lowK) k=lowK;
+			return k;
+		}
+};
